@@ -14,31 +14,33 @@ export function TaskSheet({ taskId, onClose }: Props) {
 
   if (!task) return null
 
+  const t = task // non-nullable alias for closures
+
   function handleTitleBlur() {
-    if (title.trim() && title !== task.title) {
-      updateTask(task.id, { title: title.trim() })
+    if (title.trim() && title !== t.title) {
+      updateTask(t.id, { title: title.trim() })
     }
   }
 
   function handleCategoryChange(category: string) {
-    updateTask(task.id, { category })
+    updateTask(t.id, { category })
   }
 
   function handleAssigneeChange(assignee: string | null) {
-    updateTask(task.id, { assignee })
+    updateTask(t.id, { assignee })
   }
 
   function handleDeadlineTypeChange(type: Task['deadline']['type']) {
-    updateTask(task.id, { deadline: { type, value: type ? '' : null } })
+    updateTask(t.id, { deadline: { type, value: type ? '' : null } })
   }
 
   function handleDeadlineValueChange(value: string) {
-    updateTask(task.id, { deadline: { ...task.deadline, value } })
+    updateTask(t.id, { deadline: { ...t.deadline, value } })
   }
 
   function handleDelete() {
     if (confirm('Poistetaanko tehtävä?')) {
-      deleteTask(task.id)
+      deleteTask(t.id)
       onClose()
     }
   }
@@ -50,7 +52,7 @@ export function TaskSheet({ taskId, onClose }: Props) {
         className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-20"
         onClick={onClose}
       />
-      <div className="fixed bottom-0 inset-x-0 h-[60vh] bg-white rounded-t-3xl z-30 p-5 flex flex-col gap-4 overflow-y-auto shadow-[0_-4px_30px_rgba(0,0,0,0.08)]">
+      <div className="fixed bottom-0 inset-x-0 max-h-[85vh] bg-white rounded-t-3xl z-30 p-5 flex flex-col gap-3 overflow-y-auto shadow-[0_-4px_30px_rgba(0,0,0,0.08)]">
         <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto shrink-0" />
 
         <input
@@ -88,7 +90,7 @@ export function TaskSheet({ taskId, onClose }: Props) {
                 key={type}
                 type="button"
                 onClick={() => handleDeadlineTypeChange(task.deadline.type === type ? null : type)}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                className={`flex-1 py-1.5 rounded-full text-sm font-medium transition-colors text-center ${
                   task.deadline.type === type
                     ? 'bg-accent text-white shadow-sm'
                     : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
@@ -209,12 +211,20 @@ export function TaskSheet({ taskId, onClose }: Props) {
           </select>
         </label>
 
-        <button
-          onClick={handleDelete}
-          className="mt-auto text-rose-500 text-sm font-medium py-2 hover:text-rose-600 transition-colors"
-        >
-          Poista tehtävä
-        </button>
+        <div className="flex flex-col gap-2 pt-2">
+          <button
+            onClick={onClose}
+            className="w-full py-2.5 bg-accent text-white rounded-xl text-sm font-semibold hover:bg-accent/90 transition-colors"
+          >
+            OK
+          </button>
+          <button
+            onClick={handleDelete}
+            className="text-rose-500 text-sm font-medium py-2 hover:text-rose-600 transition-colors"
+          >
+            Poista tehtävä
+          </button>
+        </div>
       </div>
     </>
   )

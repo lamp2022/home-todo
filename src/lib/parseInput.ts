@@ -18,6 +18,11 @@ const RECURRENCE_PATTERNS: [RegExp, 'weekly' | 'monthly' | 'yearly' | 'seasonal'
   [/(?:^|\s)(kausittain|joka kausi)(?:\s|$)/i, 'seasonal'],
 ]
 
+const MONTH_NAMES = [
+  'tammi', 'helmi', 'maalis', 'huhti', 'touko', 'kesä',
+  'heinä', 'elo', 'syys', 'loka', 'marras', 'joulu',
+]
+
 const DEADLINE_PATTERNS: [RegExp, () => { type: DeadlineType; value: string }][] = [
   [/(?:^|\s)huomenna(?:\s|$)/i, () => {
     const d = new Date()
@@ -40,6 +45,17 @@ const DEADLINE_PATTERNS: [RegExp, () => { type: DeadlineType; value: string }][]
     d.setMonth(d.getMonth() + 1)
     return { type: 'month', value: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` }
   }],
+  // Kuukaudet: "tammikuussa", "marraskuussa" etc.
+  ...MONTH_NAMES.map((name, i): [RegExp, () => { type: DeadlineType; value: string }] => [
+    new RegExp(`(?:^|\\s)${name}kuu(?:ssa|ssä|ssa)(?:\\s|$)`, 'i'),
+    () => {
+      const month = i + 1
+      const now = new Date()
+      const year = now.getMonth() + 1 > month ? now.getFullYear() + 1 : now.getFullYear()
+      return { type: 'month', value: `${year}-${String(month).padStart(2, '0')}` }
+    },
+  ]),
+  // Kaudet
   [/(?:^|\s)keväällä(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `kevät-${deadlineYear('kevät')}` })],
   [/(?:^|\s)kesällä(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `kesä-${deadlineYear('kesä')}` })],
   [/(?:^|\s)syksyllä(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `syksy-${deadlineYear('syksy')}` })],

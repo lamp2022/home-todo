@@ -16,12 +16,11 @@ export function TasksPage() {
   const sorted = sortByDeadline(activeTasks)
 
   const seasonalTasks = sorted.filter((t) => t.deadline.type === 'season')
-  const nonSeasonalTasks = sorted.filter((t) => t.deadline.type !== 'season')
 
   const grouped = categories
     .map((cat) => ({
       category: cat,
-      tasks: nonSeasonalTasks.filter((t) => t.category === cat),
+      tasks: sorted.filter((t) => t.category === cat),
       color: getCategoryColor(cat, categories),
     }))
     .filter((g) => g.tasks.length > 0)

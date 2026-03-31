@@ -4,9 +4,6 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App'
 
-if (import.meta.env.DEV) {
-  localStorage.removeItem('kotiasiat-state')
-}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
