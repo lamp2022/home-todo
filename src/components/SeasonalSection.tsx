@@ -4,13 +4,6 @@ import { TaskCard } from './TaskCard'
 import { getCategoryColor } from '../lib/colors'
 import { useStore } from '../store/StoreContext'
 
-const SEASON_ICONS: Record<string, string> = {
-  kevät: '🌱',
-  kesä: '☀️',
-  syksy: '🍂',
-  talvi: '❄️',
-}
-
 interface Props {
   tasks: Task[]
   now?: Date
@@ -27,15 +20,14 @@ export function SeasonalSection({ tasks, now = new Date() }: Props) {
 
   if (seasonalTasks.length === 0) return null
 
-  const icon = SEASON_ICONS[season] ?? ''
   const label = season.charAt(0).toUpperCase() + season.slice(1)
 
   return (
-    <div className="mb-4">
-      <h3 className="text-xs font-semibold uppercase tracking-wide mb-1 px-1 text-green-700">
-        {icon} Ajankohtaiset ({label})
+    <div className="mb-5">
+      <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 px-1 text-emerald-600">
+        Ajankohtaiset — {label}
       </h3>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1.5">
         {seasonalTasks.map((task) => (
           <TaskCard
             key={task.id}

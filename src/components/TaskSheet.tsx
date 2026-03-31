@@ -47,26 +47,26 @@ export function TaskSheet({ taskId, onClose }: Props) {
     <>
       <div
         data-testid="sheet-backdrop"
-        className="fixed inset-0 bg-black/30 z-20"
+        className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-20"
         onClick={onClose}
       />
-      <div className="fixed bottom-0 inset-x-0 h-[60vh] bg-white rounded-t-2xl z-30 p-4 flex flex-col gap-4 overflow-y-auto">
-        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto shrink-0" />
+      <div className="fixed bottom-0 inset-x-0 h-[60vh] bg-white rounded-t-3xl z-30 p-5 flex flex-col gap-4 overflow-y-auto shadow-[0_-4px_30px_rgba(0,0,0,0.08)]">
+        <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto shrink-0" />
 
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onBlur={handleTitleBlur}
-          className="text-lg font-medium border-b border-gray-200 pb-2 focus:outline-none"
+          className="text-lg font-semibold border-b border-gray-100 pb-2 focus:outline-none text-gray-800"
         />
 
-        <label className="flex flex-col gap-1">
-          <span className="text-xs text-gray-500">Kategoria</span>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">Kategoria</span>
           <select
             value={task.category}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
           >
             {categories.map((c) => (
               <option key={c} value={c}>{c}</option>
@@ -75,7 +75,7 @@ export function TaskSheet({ taskId, onClose }: Props) {
         </label>
 
         <div className="flex flex-col gap-2">
-          <span className="text-xs text-gray-500">Deadline</span>
+          <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">Deadline</span>
           <div className="flex flex-wrap gap-1.5">
             {([
               ['date', 'Päivä'],
@@ -90,8 +90,8 @@ export function TaskSheet({ taskId, onClose }: Props) {
                 onClick={() => handleDeadlineTypeChange(task.deadline.type === type ? null : type)}
                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                   task.deadline.type === type
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-accent text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                 }`}
               >
                 {label}
@@ -104,7 +104,7 @@ export function TaskSheet({ taskId, onClose }: Props) {
               type="date"
               value={task.deadline.value ?? ''}
               onChange={(e) => handleDeadlineValueChange(e.target.value)}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+              className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
             />
           )}
 
@@ -113,7 +113,7 @@ export function TaskSheet({ taskId, onClose }: Props) {
               type="week"
               value={task.deadline.value ?? ''}
               onChange={(e) => handleDeadlineValueChange(e.target.value)}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+              className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
             />
           )}
 
@@ -122,7 +122,7 @@ export function TaskSheet({ taskId, onClose }: Props) {
               type="month"
               value={task.deadline.value ?? ''}
               onChange={(e) => handleDeadlineValueChange(e.target.value)}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+              className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
             />
           )}
 
@@ -141,8 +141,8 @@ export function TaskSheet({ taskId, onClose }: Props) {
                       }}
                       className={`flex-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                         current === s
-                          ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-300'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          ? 'bg-accent-light text-accent ring-1 ring-accent/30'
+                          : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                       }`}
                     >
                       {s.charAt(0).toUpperCase() + s.slice(1)}
@@ -163,8 +163,8 @@ export function TaskSheet({ taskId, onClose }: Props) {
                       }}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                         currentYear === String(y)
-                          ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-300'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          ? 'bg-accent-light text-accent ring-1 ring-accent/30'
+                          : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                       }`}
                     >
                       {y}
@@ -195,12 +195,12 @@ export function TaskSheet({ taskId, onClose }: Props) {
           )}
         </div>
 
-        <label className="flex flex-col gap-1">
-          <span className="text-xs text-gray-500">Vastuuhenkilö</span>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">Vastuuhenkilö</span>
           <select
             value={task.assignee ?? ''}
             onChange={(e) => handleAssigneeChange(e.target.value || null)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
           >
             <option value="">Ei valittu</option>
             {persons.map((p) => (
@@ -211,7 +211,7 @@ export function TaskSheet({ taskId, onClose }: Props) {
 
         <button
           onClick={handleDelete}
-          className="mt-auto text-red-500 text-sm font-medium py-2"
+          className="mt-auto text-rose-500 text-sm font-medium py-2 hover:text-rose-600 transition-colors"
         >
           Poista tehtävä
         </button>

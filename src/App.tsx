@@ -9,7 +9,7 @@ import { Sidebar } from './components/Sidebar'
 export default function App() {
   return (
     <StoreProvider>
-      <div className="flex min-h-svh">
+      <div className="flex min-h-svh bg-surface">
         <Sidebar />
         <main className="flex-1 flex flex-col pb-16 md:pb-0">
           <div className="mx-auto w-full max-w-lg flex-1 flex flex-col">

@@ -30,19 +30,19 @@ export function Carousel({ tasks, now = new Date() }: Props) {
   }
 
   return (
-    <div className="h-16 flex items-center border-b border-gray-100 px-4 overflow-x-auto gap-3">
+    <div className="h-14 flex items-center border-b border-gray-100 px-4 overflow-x-auto gap-2">
       {days.length === 0 ? (
-        <p className="text-gray-400 text-sm w-full text-center">
-          Ei deadlineja seuraavalle viikolle ✓
+        <p className="text-gray-400 text-xs w-full text-center">
+          Ei deadlineja seuraavalle viikolle
         </p>
       ) : (
         days.map((d) => (
           <div
             key={d.date.toISOString()}
-            className="flex flex-col items-center shrink-0 px-3 py-1 rounded-lg bg-blue-50"
+            className="flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-lg bg-accent-light"
           >
             <span className="text-xs text-gray-600">{d.label}</span>
-            <span className="text-sm font-semibold text-blue-700">{d.count}</span>
+            <span className="text-xs font-bold text-accent">{d.count}</span>
           </div>
         ))
       )}

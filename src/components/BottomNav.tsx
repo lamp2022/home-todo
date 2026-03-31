@@ -1,26 +1,25 @@
 import { NavLink } from 'react-router-dom'
 
 const navItems = [
-  { to: '/tasks', label: 'Tehtävät', icon: '📋' },
-  { to: '/done', label: 'Tehty', icon: '✅' },
-  { to: '/settings', label: 'Asetukset', icon: '⚙️' },
+  { to: '/tasks', label: 'Tehtävät' },
+  { to: '/done', label: 'Tehty' },
+  { to: '/settings', label: 'Asetukset' },
 ]
 
 export function BottomNav() {
   return (
-    <nav className="fixed bottom-0 inset-x-0 h-16 bg-white border-t border-gray-200 flex md:hidden z-10">
+    <nav className="fixed bottom-0 inset-x-0 h-14 bg-white/90 backdrop-blur-sm border-t border-gray-100 flex md:hidden z-10">
       {navItems.map((item) => (
         <NavLink
           key={item.to}
           to={item.to}
           className={({ isActive }) =>
-            `flex-1 flex flex-col items-center justify-center gap-0.5 text-xs ${
-              isActive ? 'text-blue-600 font-medium' : 'text-gray-500'
+            `flex-1 flex items-center justify-center text-xs font-medium transition-colors ${
+              isActive ? 'text-accent' : 'text-gray-400'
             }`
           }
         >
-          <span className="text-lg">{item.icon}</span>
-          <span>{item.label}</span>
+          {item.label}
         </NavLink>
       ))}
     </nav>

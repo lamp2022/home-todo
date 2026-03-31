@@ -35,7 +35,7 @@ describe('TasksPage', () => {
   it('shows a task after adding via QuickInput', async () => {
     const user = userEvent.setup()
     renderApp()
-    const input = screen.getByPlaceholderText(/kirjoita tehtävä/i)
+    const input = screen.getByPlaceholderText(/lisää tehtävä/i)
     await user.type(input, 'Nuohous{Enter}')
     expect(screen.getByText('Nuohous')).toBeInTheDocument()
   })
@@ -43,7 +43,7 @@ describe('TasksPage', () => {
   it('groups tasks by category', async () => {
     const user = userEvent.setup()
     renderApp()
-    const input = screen.getByPlaceholderText(/kirjoita tehtävä/i)
+    const input = screen.getByPlaceholderText(/lisää tehtävä/i)
     await user.type(input, 'Nuohous{Enter}')
     await user.type(input, 'Katsastus{Enter}')
     expect(screen.getByText('Kodinhoito')).toBeInTheDocument()
@@ -53,7 +53,7 @@ describe('TasksPage', () => {
   it('completes a task via checkbox', async () => {
     const user = userEvent.setup()
     renderApp()
-    const input = screen.getByPlaceholderText(/kirjoita tehtävä/i)
+    const input = screen.getByPlaceholderText(/lisää tehtävä/i)
     await user.type(input, 'Nuohous{Enter}')
     const checkbox = screen.getByRole('checkbox')
     await user.click(checkbox)

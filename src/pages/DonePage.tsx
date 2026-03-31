@@ -76,29 +76,31 @@ export function DonePage() {
 
   return (
     <div className="flex-1 p-4">
-      <div className="flex gap-4 mb-6">
-        <div className="flex-1 bg-green-50 rounded-lg p-3 text-center">
-          <div className="text-2xl font-bold text-green-700">{thisWeekCount}</div>
-          <div className="text-xs text-green-600">Tällä viikolla</div>
+      <div className="flex gap-3 mb-6">
+        <div className="flex-1 bg-emerald-50 rounded-2xl p-4 text-center">
+          <div className="text-2xl font-bold text-emerald-600">{thisWeekCount}</div>
+          <div className="text-xs text-emerald-500 font-medium">Tällä viikolla</div>
         </div>
-        <div className="flex-1 bg-gray-50 rounded-lg p-3 text-center">
-          <div className="text-2xl font-bold text-gray-600">{lastWeekCount}</div>
-          <div className="text-xs text-gray-500">Viime viikolla</div>
+        <div className="flex-1 bg-gray-50 rounded-2xl p-4 text-center">
+          <div className="text-2xl font-bold text-gray-500">{lastWeekCount}</div>
+          <div className="text-xs text-gray-400 font-medium">Viime viikolla</div>
         </div>
       </div>
 
       {dayGroups.map((group) => (
-        <div key={group.label} className="mb-4">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+        <div key={group.label} className="mb-5">
+          <h3 className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2">
             {group.label}
           </h3>
           {group.tasks.map((t, i) => (
-            <div key={i} className="flex items-center gap-2 py-1">
-              <span className="text-green-500 text-sm">✓</span>
-              <span className="line-through text-sm text-gray-500">{t.title}</span>
+            <div key={i} className="flex items-center gap-2.5 py-2 px-3 bg-white rounded-xl mb-1">
+              <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 text-xs flex items-center justify-center font-bold">
+                &#10003;
+              </span>
+              <span className="line-through text-sm text-gray-400 flex-1">{t.title}</span>
               {t.completedBy && (
-                <span className="text-xs text-gray-400 ml-auto">
-                  👤{t.completedBy[0]}
+                <span className="w-5 h-5 rounded-full bg-accent-light text-accent text-[10px] font-bold flex items-center justify-center">
+                  {t.completedBy[0]}
                 </span>
               )}
             </div>

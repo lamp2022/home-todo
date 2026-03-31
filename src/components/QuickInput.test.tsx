@@ -23,7 +23,7 @@ describe('QuickInput', () => {
   it('creates a task when pressing Enter', async () => {
     const user = userEvent.setup()
     renderWithProviders(<QuickInput />)
-    const input = screen.getByPlaceholderText(/kirjoita tehtävä/i)
+    const input = screen.getByPlaceholderText(/lisää tehtävä/i)
     await user.type(input, 'Nuohous{Enter}')
     // input should clear after creation
     expect(input).toHaveValue('')
@@ -32,7 +32,7 @@ describe('QuickInput', () => {
   it('does not create a task with empty title', async () => {
     const user = userEvent.setup()
     renderWithProviders(<QuickInput />)
-    const input = screen.getByPlaceholderText(/kirjoita tehtävä/i)
+    const input = screen.getByPlaceholderText(/lisää tehtävä/i)
     await user.type(input, '{Enter}')
     expect(input).toHaveValue('')
   })

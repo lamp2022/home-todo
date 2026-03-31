@@ -1,12 +1,12 @@
 const PALETTE = [
-  '#3b82f6', // blue
-  '#22c55e', // green
-  '#f59e0b', // amber
-  '#ef4444', // red
-  '#8b5cf6', // violet
-  '#6b7280', // gray
-  '#ec4899', // pink
-  '#14b8a6', // teal
+  '#7c3aed', // violet
+  '#0891b2', // cyan
+  '#d97706', // amber
+  '#059669', // emerald
+  '#e11d48', // rose
+  '#2563eb', // blue
+  '#c026d3', // fuchsia
+  '#0d9488', // teal
 ]
 
 export function getCategoryColor(category: string, allCategories: string[]): string {
