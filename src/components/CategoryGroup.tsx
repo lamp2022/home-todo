@@ -1,5 +1,6 @@
 import type { Task } from '../types'
 import { TaskCard } from './TaskCard'
+import { useStore } from '../store/StoreContext'
 
 export function CategoryGroup({ category, tasks, color, onTaskClick }: {
   category: string
@@ -7,6 +8,7 @@ export function CategoryGroup({ category, tasks, color, onTaskClick }: {
   color: string
   onTaskClick?: (task: Task) => void
 }) {
+  const { completeTask } = useStore()
   if (tasks.length === 0) return null
   return (
     <div className="mb-5">
@@ -19,7 +21,7 @@ export function CategoryGroup({ category, tasks, color, onTaskClick }: {
       <div className="flex flex-col gap-1.5">
         {tasks.map((task) => (
           <div key={task.id} onClick={() => onTaskClick?.(task)} className="cursor-pointer">
-            <TaskCard task={task} color={color} />
+            <TaskCard task={task} color={color} onCheck={() => completeTask(task.id)} />
           </div>
         ))}
       </div>

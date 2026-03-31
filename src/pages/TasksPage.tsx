@@ -7,6 +7,7 @@ import { CategoryGroup } from '../components/CategoryGroup'
 import { TaskSheet } from '../components/TaskSheet'
 import { getCategoryColor } from '../lib/colors'
 import { sortByDeadline } from '../lib/deadlines'
+import { TaskSuggestions } from '../components/TaskSuggestions'
 
 export function TasksPage() {
   const { tasks, categories } = useStore()
@@ -41,6 +42,7 @@ export function TasksPage() {
             onTaskClick={(task) => setEditingTaskId(task.id)}
           />
         ))}
+        <TaskSuggestions />
       </div>
       {editingTaskId && (
         <TaskSheet

@@ -46,8 +46,8 @@ describe('TasksPage', () => {
     const input = screen.getByPlaceholderText(/lisää tehtävä/i)
     await user.type(input, 'Nuohous{Enter}')
     await user.type(input, 'Katsastus{Enter}')
-    expect(screen.getByText('Kodinhoito')).toBeInTheDocument()
-    expect(screen.getByText('Ajoneuvot')).toBeInTheDocument()
+    expect(screen.getAllByText('Kodinhoito').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Ajoneuvot').length).toBeGreaterThanOrEqual(1)
   })
 
   it('completes a task via checkbox', async () => {
