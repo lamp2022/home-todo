@@ -7,11 +7,10 @@ import { CategoryGroup } from '../components/CategoryGroup'
 import { TaskSheet } from '../components/TaskSheet'
 import { getCategoryColor } from '../lib/colors'
 import { sortByDeadline } from '../lib/deadlines'
-import type { Task } from '../types'
 
 export function TasksPage() {
   const { tasks, categories } = useStore()
-  const [editingTask, setEditingTask] = useState<Task | null>(null)
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null)
 
   const activeTasks = tasks.filter((t) => !t.completedAt)
   const sorted = sortByDeadline(activeTasks)
@@ -40,14 +39,14 @@ export function TasksPage() {
           <CategoryGroup
             key={g.category}
             {...g}
-            onTaskClick={(task) => setEditingTask(task)}
+            onTaskClick={(task) => setEditingTaskId(task.id)}
           />
         ))}
       </div>
-      {editingTask && (
+      {editingTaskId && (
         <TaskSheet
-          task={editingTask}
-          onClose={() => setEditingTask(null)}
+          taskId={editingTaskId}
+          onClose={() => setEditingTaskId(null)}
         />
       )}
     </div>

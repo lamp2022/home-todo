@@ -3,13 +3,16 @@ import type { Task } from '../types'
 import { useStore } from '../store/StoreContext'
 
 interface Props {
-  task: Task
+  taskId: string
   onClose: () => void
 }
 
-export function TaskSheet({ task, onClose }: Props) {
-  const { updateTask, deleteTask, categories, persons } = useStore()
-  const [title, setTitle] = useState(task.title)
+export function TaskSheet({ taskId, onClose }: Props) {
+  const { tasks, updateTask, deleteTask, categories, persons } = useStore()
+  const task = tasks.find((t) => t.id === taskId)
+  const [title, setTitle] = useState(task?.title ?? '')
+
+  if (!task) return null
 
   function handleTitleBlur() {
     if (title.trim() && title !== task.title) {
@@ -71,47 +74,126 @@ export function TaskSheet({ task, onClose }: Props) {
           </select>
         </label>
 
-        <label className="flex flex-col gap-1">
-          <span className="text-xs text-gray-500">Deadline-tyyppi</span>
-          <select
-            value={task.deadline.type ?? ''}
-            onChange={(e) => handleDeadlineTypeChange((e.target.value || null) as Task['deadline']['type'])}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
-          >
-            <option value="">Ei deadlinea</option>
-            <option value="date">Päivä</option>
-            <option value="week">Viikko</option>
-            <option value="month">Kuukausi</option>
-            <option value="season">Kausi</option>
-            <option value="year">Vuosi</option>
-          </select>
-        </label>
+        <div className="flex flex-col gap-2">
+          <span className="text-xs text-gray-500">Deadline</span>
+          <div className="flex flex-wrap gap-1.5">
+            {([
+              ['date', 'Päivä'],
+              ['week', 'Viikko'],
+              ['month', 'Kk'],
+              ['season', 'Kausi'],
+              ['year', 'Vuosi'],
+            ] as [Task['deadline']['type'], string][]).map(([type, label]) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => handleDeadlineTypeChange(task.deadline.type === type ? null : type)}
+                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  task.deadline.type === type
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
-        {task.deadline.type === 'date' && (
-          <input
-            type="date"
-            value={task.deadline.value ?? ''}
-            onChange={(e) => handleDeadlineValueChange(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
-          />
-        )}
+          {task.deadline.type === 'date' && (
+            <input
+              type="date"
+              value={task.deadline.value ?? ''}
+              onChange={(e) => handleDeadlineValueChange(e.target.value)}
+              className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            />
+          )}
 
-        {task.deadline.type === 'season' && (
-          <select
-            value={task.deadline.value ?? ''}
-            onChange={(e) => handleDeadlineValueChange(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
-          >
-            <option value="">Valitse kausi</option>
-            {['kevät', 'kesä', 'syksy', 'talvi'].flatMap((s) =>
-              [2026, 2027].map((y) => (
-                <option key={`${s}-${y}`} value={`${s}-${y}`}>
-                  {s.charAt(0).toUpperCase() + s.slice(1)} {y}
-                </option>
-              ))
-            )}
-          </select>
-        )}
+          {task.deadline.type === 'week' && (
+            <input
+              type="week"
+              value={task.deadline.value ?? ''}
+              onChange={(e) => handleDeadlineValueChange(e.target.value)}
+              className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            />
+          )}
+
+          {task.deadline.type === 'month' && (
+            <input
+              type="month"
+              value={task.deadline.value ?? ''}
+              onChange={(e) => handleDeadlineValueChange(e.target.value)}
+              className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            />
+          )}
+
+          {task.deadline.type === 'season' && (
+            <div className="flex flex-col gap-1.5">
+              <div className="flex gap-1.5">
+                {(['kevät', 'kesä', 'syksy', 'talvi'] as const).map((s) => {
+                  const current = task.deadline.value?.split('-')[0]
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => {
+                        const year = task.deadline.value?.split('-')[1] ?? String(new Date().getFullYear())
+                        handleDeadlineValueChange(`${s}-${year}`)
+                      }}
+                      className={`flex-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        current === s
+                          ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-300'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      {s.charAt(0).toUpperCase() + s.slice(1)}
+                    </button>
+                  )
+                })}
+              </div>
+              <div className="flex gap-1.5">
+                {[2025, 2026, 2027].map((y) => {
+                  const currentYear = task.deadline.value?.split('-')[1]
+                  return (
+                    <button
+                      key={y}
+                      type="button"
+                      onClick={() => {
+                        const season = task.deadline.value?.split('-')[0] ?? 'kevät'
+                        handleDeadlineValueChange(`${season}-${y}`)
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        currentYear === String(y)
+                          ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-300'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      {y}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {task.deadline.type === 'year' && (
+            <div className="flex gap-1.5">
+              {[2025, 2026, 2027, 2028].map((y) => (
+                <button
+                  key={y}
+                  type="button"
+                  onClick={() => handleDeadlineValueChange(String(y))}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    task.deadline.value === String(y)
+                      ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-300'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {y}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         <label className="flex flex-col gap-1">
           <span className="text-xs text-gray-500">Vastuuhenkilö</span>
