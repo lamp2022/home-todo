@@ -1,13 +1,14 @@
 import { useState, useRef } from 'react'
 import { useStore } from '../store/StoreContext'
 import { suggestCategory } from '../lib/CategoryService'
-import { parseDeadline as parseInput, todayDeadline, tomorrowDeadline, nextWeekDeadline, nextMonthDeadline } from '../lib/Deadline'
+import { parseDeadline as parseInput, todayDeadline, tomorrowDeadline, nextWeekDeadline, thisMonthDeadline, nextMonthDeadline } from '../lib/Deadline'
 import type { Task } from '../types'
 
 const QUICK_DEADLINES: { label: string; get: () => Task['deadline'] }[] = [
   { label: 'Tänään', get: todayDeadline },
   { label: 'Huomenna', get: tomorrowDeadline },
   { label: 'Ensi vko', get: nextWeekDeadline },
+  { label: 'Tässä kk', get: thisMonthDeadline },
   { label: 'Ensi kk', get: nextMonthDeadline },
 ]
 

@@ -124,6 +124,11 @@ export function nextWeekDeadline(): { type: DeadlineType; value: string } {
   return { type: 'week', value: `${year}-W${String(week).padStart(2, '0')}` }
 }
 
+export function thisMonthDeadline(): { type: DeadlineType; value: string } {
+  const d = new Date()
+  return { type: 'month', value: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` }
+}
+
 export function nextMonthDeadline(): { type: DeadlineType; value: string } {
   const d = new Date()
   d.setMonth(d.getMonth() + 1)
