@@ -12,6 +12,7 @@ export interface Task {
     interval: 'weekly' | 'monthly' | 'yearly' | 'seasonal'
     anchor: string
   } | null
+  note: string | null
   completedAt: string | null
   completedBy: string | null
   createdAt: string

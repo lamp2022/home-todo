@@ -18,6 +18,7 @@ function makeTask(overrides: Partial<Task> = {}): Task {
     category: 'Muu',
     deadline: { type: null, value: null },
     assignee: null,
+    note: null,
     recurring: false,
     recurrence: null,
     completedAt: null,

@@ -51,6 +51,7 @@ export function createStore(storage: Storage = localStorage) {
         assignee: partial.assignee ?? null,
         recurring: partial.recurring ?? false,
         recurrence: partial.recurrence ?? null,
+        note: null,
         completedAt: null,
         completedBy: null,
         createdAt: new Date().toISOString(),
@@ -60,7 +61,7 @@ export function createStore(storage: Storage = localStorage) {
       return task
     },
 
-    updateTask(id: string, updates: Partial<Pick<Task, 'title' | 'category' | 'deadline' | 'assignee' | 'recurring' | 'recurrence'>>) {
+    updateTask(id: string, updates: Partial<Pick<Task, 'title' | 'category' | 'deadline' | 'assignee' | 'recurring' | 'recurrence' | 'note'>>) {
       state = {
         ...state,
         tasks: state.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
