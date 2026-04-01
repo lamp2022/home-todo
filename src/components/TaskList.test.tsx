@@ -50,13 +50,14 @@ describe('TasksPage', () => {
     expect(screen.getAllByText('Ajoneuvot').length).toBeGreaterThanOrEqual(1)
   })
 
-  it('completes a task via checkbox', async () => {
+  it('completes a task via checkbox and shows it with strikethrough', async () => {
     const user = userEvent.setup()
     renderApp()
     const input = screen.getByPlaceholderText(/lisää tehtävä/i)
     await user.type(input, 'Nuohous{Enter}')
     const checkbox = screen.getByRole('checkbox')
     await user.click(checkbox)
-    expect(screen.queryByText('Nuohous')).not.toBeInTheDocument()
+    // Task stays visible (strikethrough) for 7 days
+    expect(screen.getByText('Nuohous')).toBeInTheDocument()
   })
 })

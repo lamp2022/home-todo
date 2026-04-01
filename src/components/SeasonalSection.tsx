@@ -1,15 +1,16 @@
 import type { Task } from '../types'
-import { getCurrentSeason } from '../lib/deadlines'
+import { getCurrentSeason } from '../lib/Deadline'
 import { TaskCard } from './TaskCard'
-import { getCategoryColor } from '../lib/colors'
+import { getCategoryColor } from '../lib/CategoryService'
 import { useStore } from '../store/StoreContext'
 
 interface Props {
   tasks: Task[]
   now?: Date
+  onTaskClick?: (task: Task) => void
 }
 
-export function SeasonalSection({ tasks, now = new Date() }: Props) {
+export function SeasonalSection({ tasks, now = new Date(), onTaskClick }: Props) {
   const { categories } = useStore()
   const season = getCurrentSeason(now)
   const seasonalTasks = tasks.filter((t) => {
@@ -29,11 +30,12 @@ export function SeasonalSection({ tasks, now = new Date() }: Props) {
       </h3>
       <div className="flex flex-col gap-1.5">
         {seasonalTasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            color={getCategoryColor(task.category, categories)}
-          />
+          <div key={task.id} onClick={() => onTaskClick?.(task)} className="cursor-pointer">
+            <TaskCard
+              task={task}
+              color={getCategoryColor(task.category, categories)}
+            />
+          </div>
         ))}
       </div>
     </div>

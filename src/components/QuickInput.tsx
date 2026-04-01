@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useStore } from '../store/StoreContext'
-import { suggestCategory } from '../lib/categorize'
-import { parseInput } from '../lib/parseInput'
+import { suggestCategory } from '../lib/CategoryService'
+import { parseDeadline as parseInput } from '../lib/Deadline'
 
 export function QuickInput() {
   const { addTask } = useStore()

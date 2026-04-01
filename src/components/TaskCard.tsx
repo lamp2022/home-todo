@@ -1,28 +1,6 @@
 import type { Task } from '../types'
-import { isOverdue } from '../lib/deadlines'
+import { isOverdue, formatDeadline } from '../lib/Deadline'
 import { useStore } from '../store/StoreContext'
-
-function formatDeadline(task: Task): string {
-  const { type, value } = task.deadline
-  if (!type || !value) return ''
-  switch (type) {
-    case 'date': {
-      const d = new Date(value)
-      return `${d.getDate()}.${d.getMonth() + 1}.`
-    }
-    case 'week': return `Vko ${value.split('-W')[1]}`
-    case 'month': {
-      const [y, m] = value.split('-')
-      return `${m}/${y}`
-    }
-    case 'season': {
-      const [s, y] = value.split('-')
-      return `${s.charAt(0).toUpperCase() + s.slice(1)} ${y}`
-    }
-    case 'year': return value
-    default: return ''
-  }
-}
 
 export function TaskCard({ task, color, onCheck }: { task: Task; color: string; onCheck?: () => void }) {
   const overdue = isOverdue(task)

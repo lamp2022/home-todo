@@ -28,9 +28,9 @@ function renderSettings() {
 describe('SettingsPage', () => {
   it('shows default categories', () => {
     renderSettings()
-    expect(screen.getByText('Kodinhoito')).toBeInTheDocument()
-    expect(screen.getByText('Piha')).toBeInTheDocument()
-    expect(screen.getByText('Ajoneuvot')).toBeInTheDocument()
+    expect(screen.getAllByText('Kodinhoito').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Piha').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Ajoneuvot').length).toBeGreaterThanOrEqual(1)
   })
 
   it('can add a person', async () => {
@@ -46,6 +46,6 @@ describe('SettingsPage', () => {
     renderSettings()
     const input = screen.getByPlaceholderText(/uusi kategoria/i)
     await user.type(input, 'Lemmikit{Enter}')
-    expect(screen.getByText('Lemmikit')).toBeInTheDocument()
+    expect(screen.getAllByText('Lemmikit').length).toBeGreaterThanOrEqual(1)
   })
 })

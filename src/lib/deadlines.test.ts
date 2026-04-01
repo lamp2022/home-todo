@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getCurrentSeason, isOverdue, sortByDeadline, getSeasonStartDate } from './deadlines'
+import { getCurrentSeason, isOverdue, sortByDeadline, getSeasonStartDate } from './Deadline'
 import type { Task } from '../types'
 
 function makeTask(overrides: Partial<Task> = {}): Task {

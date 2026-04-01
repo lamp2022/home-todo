@@ -1,9 +1,9 @@
 import { useStore } from '../store/StoreContext'
-import { suggestCategory } from '../lib/categorize'
-import { parseInput } from '../lib/parseInput'
-import { getCategoryColor } from '../lib/colors'
+import { suggestCategory } from '../lib/CategoryService'
+import { parseDeadline as parseInput } from '../lib/Deadline'
+import { getCategoryColor } from '../lib/CategoryService'
 
-const SUGGESTIONS: { title: string; hint: string; category: string }[] = [
+export const DEFAULT_SUGGESTIONS: { title: string; hint: string; category: string }[] = [
   // Kodinhoito
   { title: 'Ikkunoiden pesu', hint: 'keväällä', category: 'Kodinhoito' },
   { title: 'Ilmanvaihtosuodattimen vaihto', hint: 'vuosittain', category: 'Kodinhoito' },
@@ -43,10 +43,14 @@ const SUGGESTIONS: { title: string; hint: string; category: string }[] = [
 ]
 
 export function TaskSuggestions() {
-  const { addTask, tasks, categories } = useStore()
+  const { addTask, tasks, categories, suggestions } = useStore()
 
   const existingTitles = new Set(tasks.map((t) => t.title.toLowerCase()))
-  const available = SUGGESTIONS.filter((s) => !existingTitles.has(s.title.toLowerCase()))
+
+  // Merge defaults + custom suggestions from store
+  const customSuggs = (suggestions ?? []).map((s) => ({ title: s.title, hint: s.hint, category: s.category }))
+  const allSuggs = [...DEFAULT_SUGGESTIONS, ...customSuggs]
+  const available = allSuggs.filter((s) => !existingTitles.has(s.title.toLowerCase()))
 
   if (available.length === 0) return null
 
@@ -70,7 +74,6 @@ export function TaskSuggestions() {
     }))
     .filter((g) => g.suggestions.length > 0)
 
-  // Add "Muu" category for uncategorized
   const uncategorized = available.filter((s) => !categories.includes(s.category)).sort((a, b) => a.title.localeCompare(b.title, 'fi'))
   if (uncategorized.length > 0) {
     grouped.push({

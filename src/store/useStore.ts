@@ -1,4 +1,4 @@
-import type { Task, AppState } from '../types'
+import type { Task, AppState, Suggestion } from '../types'
 import { DEFAULT_CATEGORIES } from '../types'
 
 const STORAGE_KEY = 'kotiasiat-state'
@@ -36,15 +36,21 @@ export function createStore(storage: Storage = localStorage) {
   return {
     getState: () => state,
 
-    addTask(partial: { title: string; category: string; deadline?: Task['deadline']; assignee?: string | null }) {
+    addTask(partial: { title: string; category: string; deadline?: Task['deadline']; assignee?: string | null; recurring?: boolean; recurrence?: Task['recurrence'] }) {
+      const title = partial.title.trim()
+      if (!title) throw new Error('Task title cannot be empty')
+      const category = partial.category || state.categories[0] || 'Muu'
+      if (!state.categories.includes(category)) {
+        state = { ...state, categories: [...state.categories, category] }
+      }
       const task: Task = {
         id: crypto.randomUUID(),
-        title: partial.title,
-        category: partial.category,
+        title,
+        category,
         deadline: partial.deadline ?? { type: null, value: null },
         assignee: partial.assignee ?? null,
-        recurring: false,
-        recurrence: null,
+        recurring: partial.recurring ?? false,
+        recurrence: partial.recurrence ?? null,
         completedAt: null,
         completedBy: null,
         createdAt: new Date().toISOString(),
@@ -104,6 +110,40 @@ export function createStore(storage: Storage = localStorage) {
 
     removeCategory(name: string) {
       state = { ...state, categories: state.categories.filter((c) => c !== name) }
+      saveState(storage, state)
+    },
+
+    getSuggestions(): Suggestion[] {
+      return state.suggestions ?? []
+    },
+
+    addSuggestion(s: { title: string; hint: string; category: string }) {
+      const suggestion: Suggestion = { id: crypto.randomUUID(), ...s }
+      state = { ...state, suggestions: [...(state.suggestions ?? []), suggestion] }
+      saveState(storage, state)
+      return suggestion
+    },
+
+    updateSuggestion(id: string, updates: Partial<Pick<Suggestion, 'title' | 'hint' | 'category'>>) {
+      state = {
+        ...state,
+        suggestions: (state.suggestions ?? []).map((s) => (s.id === id ? { ...s, ...updates } : s)),
+      }
+      saveState(storage, state)
+    },
+
+    removeSuggestion(id: string) {
+      state = { ...state, suggestions: (state.suggestions ?? []).filter((s) => s.id !== id) }
+      saveState(storage, state)
+    },
+
+    uncompleteTask(id: string) {
+      state = {
+        ...state,
+        tasks: state.tasks.map((t) =>
+          t.id === id ? { ...t, completedAt: null, completedBy: null } : t
+        ),
+      }
       saveState(storage, state)
     },
   }

@@ -22,11 +22,19 @@ export interface Person {
   name: string
 }
 
+export interface Suggestion {
+  id: string
+  title: string
+  hint: string
+  category: string
+}
+
 export interface AppState {
   tasks: Task[]
   persons: Person[]
   categories: string[]
   deviceOwner: string | null
+  suggestions?: Suggestion[]
 }
 
 export const DEFAULT_CATEGORIES = [

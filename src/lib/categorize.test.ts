@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { suggestCategory } from './categorize'
+import { suggestCategory } from './CategoryService'
 
 describe('suggestCategory', () => {
   it('suggests Kodinhoito for cleaning keywords', () => {
