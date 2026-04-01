@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      // GitHub Pages SPA redirect
+      var path = window.location.pathname
+      var base = '/home-todo/'
+      if (path.startsWith(base)) {
+        path = path.slice(base.length - 1)
+      }
+      window.location.replace(base + '?p=' + encodeURIComponent(path))
+    </script>
+  </head>
+</html>

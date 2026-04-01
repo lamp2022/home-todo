@@ -8,6 +8,18 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // GitHub Pages SPA: restore path from 404 redirect
+      (function() {
+        var q = new URLSearchParams(window.location.search)
+        var p = q.get('p')
+        if (p) {
+          q.delete('p')
+          var rest = q.toString()
+          history.replaceState(null, '', p + (rest ? '?' + rest : ''))
+        }
+      })()
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
