@@ -45,7 +45,7 @@ describe('DonePage', () => {
       {
         id: '1', title: 'Nuohous', category: 'Kodinhoito',
         deadline: { type: null, value: null }, assignee: null,
-        recurring: false, recurrence: null,
+        recurring: false, recurrence: null, note: null,
         completedAt: now.toISOString(), completedBy: 'Mika',
         createdAt: now.toISOString(),
       },
@@ -61,7 +61,7 @@ describe('DonePage', () => {
       {
         id: '1', title: 'Nuohous', category: 'Kodinhoito',
         deadline: { type: null, value: null }, assignee: null,
-        recurring: false, recurrence: null,
+        recurring: false, recurrence: null, note: null,
         completedAt: now.toISOString(), completedBy: 'Mika',
         createdAt: now.toISOString(),
       },

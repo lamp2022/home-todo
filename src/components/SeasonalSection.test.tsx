@@ -14,6 +14,7 @@ function makeSeasonTask(title: string, season: string): Task {
     assignee: null,
     recurring: false,
     recurrence: null,
+    note: null,
     completedAt: null,
     completedBy: null,
     createdAt: '2026-01-01T00:00:00Z',
