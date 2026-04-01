@@ -13,7 +13,6 @@ export function TaskSheet({ taskId, onClose }: Props) {
   const { tasks, updateTask, deleteTask, categories, persons } = useStore()
   const task = tasks.find((t) => t.id === taskId)
   const [title, setTitle] = useState(task?.title ?? '')
-  const [noteOpen, setNoteOpen] = useState(!!task?.note)
 
   if (!task) return null
 
@@ -92,26 +91,17 @@ export function TaskSheet({ taskId, onClose }: Props) {
           onChange={handleRecurrenceChange}
         />
 
-        {noteOpen ? (
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">Muistiinpano</span>
-            <textarea
-              defaultValue={task.note ?? ''}
-              onBlur={(e) => updateTask(task.id, { note: e.target.value.trim() || null })}
-              placeholder="Lisätietoja..."
-              rows={2}
-              className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm resize-none focus:ring-2 focus:ring-teal-200 focus:border-teal-300 transition-all"
-            />
-          </label>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setNoteOpen(true)}
-            className="text-xs text-gray-400 hover:text-teal-600 transition-colors text-left"
-          >
-            + Muistiinpano
-          </button>
-        )}
+        <label className="flex flex-col gap-1.5">
+          <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">Muistiinpano</span>
+          <textarea
+            defaultValue={task.note ?? ''}
+            onBlur={(e) => updateTask(task.id, { note: e.target.value.trim() || null })}
+            onInput={(e) => { const t = e.currentTarget; t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px' }}
+            placeholder="Lisätietoja..."
+            rows={1}
+            className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm resize-none focus:ring-2 focus:ring-teal-200 focus:border-teal-300 transition-all overflow-hidden"
+          />
+        </label>
 
         <label className="flex flex-col gap-1.5">
           <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">Vastuuhenkilö</span>
