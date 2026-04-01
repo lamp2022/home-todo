@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getCurrentSeason, isOverdue, sortByDeadline, getSeasonStartDate } from './Deadline'
+import { getCurrentSeason, isOverdue, sortByDeadline, getSeasonStartDate, parseDeadline, todayDeadline, tomorrowDeadline, nextWeekDeadline, nextMonthDeadline } from './Deadline'
 import type { Task } from '../types'
 
 function makeTask(overrides: Partial<Task> = {}): Task {
@@ -113,5 +113,98 @@ describe('sortByDeadline', () => {
     const sorted = sortByDeadline([none, dated], now)
     expect(sorted[0].title).toBe('dated')
     expect(sorted[1].title).toBe('none')
+  })
+})
+
+describe('deadline helpers', () => {
+  it('todayDeadline returns date type with today', () => {
+    const dl = todayDeadline()
+    expect(dl.type).toBe('date')
+    expect(dl.value).toBe(new Date().toISOString().split('T')[0])
+  })
+
+  it('tomorrowDeadline returns date type', () => {
+    const dl = tomorrowDeadline()
+    expect(dl.type).toBe('date')
+  })
+
+  it('nextWeekDeadline returns week type', () => {
+    const dl = nextWeekDeadline()
+    expect(dl.type).toBe('week')
+    expect(dl.value).toMatch(/^\d{4}-W\d{2}$/)
+  })
+
+  it('nextMonthDeadline returns month type', () => {
+    const dl = nextMonthDeadline()
+    expect(dl.type).toBe('month')
+    expect(dl.value).toMatch(/^\d{4}-\d{2}$/)
+  })
+})
+
+describe('parseDeadline typo tolerance', () => {
+  it('parses tänän as today', () => {
+    const r = parseDeadline('Siivous tänän')
+    expect(r.deadline.type).toBe('date')
+    expect(r.title).toBe('Siivous')
+  })
+
+  it('parses huomena as tomorrow', () => {
+    const r = parseDeadline('Imurointi huomena')
+    expect(r.deadline.type).toBe('date')
+    expect(r.title).toBe('Imurointi')
+  })
+
+  it('parses ensi viikola as next week', () => {
+    const r = parseDeadline('Pesu ensi viikola')
+    expect(r.deadline.type).toBe('week')
+    expect(r.title).toBe('Pesu')
+  })
+
+  it('parses ensi kuusa as next month', () => {
+    const r = parseDeadline('Lasku ensi kuusa')
+    expect(r.deadline.type).toBe('month')
+    expect(r.title).toBe('Lasku')
+  })
+
+  it('parses kevällä as spring', () => {
+    const r = parseDeadline('Haravointi kevällä')
+    expect(r.deadline.type).toBe('season')
+    expect(r.deadline.value).toMatch(/^kevät-/)
+  })
+
+  it('parses kesälä as summer', () => {
+    const r = parseDeadline('Nurmikon leikkuu kesälä')
+    expect(r.deadline.type).toBe('season')
+    expect(r.deadline.value).toMatch(/^kesä-/)
+  })
+
+  it('parses syksylä as autumn', () => {
+    const r = parseDeadline('Lehtien haravointi syksylä')
+    expect(r.deadline.type).toBe('season')
+    expect(r.deadline.value).toMatch(/^syksy-/)
+  })
+
+  it('parses talvela as winter', () => {
+    const r = parseDeadline('Lumityöt talvela')
+    expect(r.deadline.type).toBe('season')
+    expect(r.deadline.value).toMatch(/^talvi-/)
+  })
+
+  it('parses kuukausitain as monthly recurrence', () => {
+    const r = parseDeadline('Siivous kuukausitain')
+    expect(r.recurring).toBe(true)
+    expect(r.recurrence?.interval).toBe('monthly')
+  })
+
+  it('parses vuositain as yearly recurrence', () => {
+    const r = parseDeadline('Nuohous vuositain')
+    expect(r.recurring).toBe(true)
+    expect(r.recurrence?.interval).toBe('yearly')
+  })
+
+  it('parses month name with single s typo', () => {
+    const r = parseDeadline('Veroilmoitus tammikuusa')
+    expect(r.deadline.type).toBe('month')
+    expect(r.title).toBe('Veroilmoitus')
   })
 })

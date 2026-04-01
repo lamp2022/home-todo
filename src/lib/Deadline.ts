@@ -29,10 +29,10 @@ const MONTH_NAMES = [
 ]
 
 const RECURRENCE_PATTERNS: [RegExp, 'weekly' | 'monthly' | 'yearly' | 'seasonal'][] = [
-  [/(?:^|\s)(viikottain|viikoittain|joka viikko)(?:\s|$)/i, 'weekly'],
-  [/(?:^|\s)(kuukausittain|joka kuukausi)(?:\s|$)/i, 'monthly'],
-  [/(?:^|\s)(vuosittain|joka vuosi|kerran vuodessa)(?:\s|$)/i, 'yearly'],
-  [/(?:^|\s)(kausittain|joka kausi)(?:\s|$)/i, 'seasonal'],
+  [/(?:^|\s)(viikottain|viikoittain|viikotain|joka viikko)(?:\s|$)/i, 'weekly'],
+  [/(?:^|\s)(kuukausittain|kuukausitain|joka kuukausi)(?:\s|$)/i, 'monthly'],
+  [/(?:^|\s)(vuosittain|vuositain|joka vuosi|kerran vuodessa)(?:\s|$)/i, 'yearly'],
+  [/(?:^|\s)(kausittain|kausitain|joka kausi)(?:\s|$)/i, 'seasonal'],
 ]
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -104,30 +104,39 @@ function deadlineToSortDate(task: Task): number {
 
 // ─── Deadline patterns for parsing ───────────────────────────────────────────
 
+// ─── Deadline helper functions (reusable from UI chips) ─────────────────────
+
+export function todayDeadline(): { type: DeadlineType; value: string } {
+  return { type: 'date', value: new Date().toISOString().split('T')[0] }
+}
+
+export function tomorrowDeadline(): { type: DeadlineType; value: string } {
+  const d = new Date()
+  d.setDate(d.getDate() + 1)
+  return { type: 'date', value: d.toISOString().split('T')[0] }
+}
+
+export function nextWeekDeadline(): { type: DeadlineType; value: string } {
+  const d = new Date()
+  d.setDate(d.getDate() + 7)
+  const year = d.getFullYear()
+  const week = getISOWeek(d)
+  return { type: 'week', value: `${year}-W${String(week).padStart(2, '0')}` }
+}
+
+export function nextMonthDeadline(): { type: DeadlineType; value: string } {
+  const d = new Date()
+  d.setMonth(d.getMonth() + 1)
+  return { type: 'month', value: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` }
+}
+
 const DEADLINE_PATTERNS: [RegExp, () => { type: DeadlineType; value: string }][] = [
-  [/(?:^|\s)huomenna(?:\s|$)/i, () => {
-    const d = new Date()
-    d.setDate(d.getDate() + 1)
-    return { type: 'date', value: d.toISOString().split('T')[0] }
-  }],
-  [/(?:^|\s)tänään(?:\s|$)/i, () => ({
-    type: 'date',
-    value: new Date().toISOString().split('T')[0],
-  })],
-  [/(?:^|\s)ensi viikolla(?:\s|$)/i, () => {
-    const d = new Date()
-    d.setDate(d.getDate() + 7)
-    const year = d.getFullYear()
-    const week = getISOWeek(d)
-    return { type: 'week', value: `${year}-W${String(week).padStart(2, '0')}` }
-  }],
-  [/(?:^|\s)ensi kuussa(?:\s|$)/i, () => {
-    const d = new Date()
-    d.setMonth(d.getMonth() + 1)
-    return { type: 'month', value: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` }
-  }],
+  [/(?:^|\s)(?:huomenna|huomena)(?:\s|$)/i, tomorrowDeadline],
+  [/(?:^|\s)(?:tänään|tänän)(?:\s|$)/i, todayDeadline],
+  [/(?:^|\s)ensi viiko(?:lla|la)(?:\s|$)/i, nextWeekDeadline],
+  [/(?:^|\s)ensi kuu(?:ssa|sa)(?:\s|$)/i, nextMonthDeadline],
   ...MONTH_NAMES.map((name, i): [RegExp, () => { type: DeadlineType; value: string }] => [
-    new RegExp(`(?:^|\\s)${name}kuu(?:ssa|ssä|ssa)(?:\\s|$)`, 'i'),
+    new RegExp(`(?:^|\\s)${name}kuu(?:ssa|ssä|sa|sä)(?:\\s|$)`, 'i'),
     () => {
       const month = i + 1
       const now = new Date()
@@ -135,10 +144,10 @@ const DEADLINE_PATTERNS: [RegExp, () => { type: DeadlineType; value: string }][]
       return { type: 'month', value: `${year}-${String(month).padStart(2, '0')}` }
     },
   ]),
-  [/(?:^|\s)keväällä(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `kevät-${deadlineYear('kevät')}` })],
-  [/(?:^|\s)kesällä(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `kesä-${deadlineYear('kesä')}` })],
-  [/(?:^|\s)syksyllä(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `syksy-${deadlineYear('syksy')}` })],
-  [/(?:^|\s)talvella(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `talvi-${deadlineYear('talvi')}` })],
+  [/(?:^|\s)(?:keväällä|kevällä|keväälä)(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `kevät-${deadlineYear('kevät')}` })],
+  [/(?:^|\s)(?:kesällä|kesälä)(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `kesä-${deadlineYear('kesä')}` })],
+  [/(?:^|\s)(?:syksyllä|syksylä)(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `syksy-${deadlineYear('syksy')}` })],
+  [/(?:^|\s)(?:talvella|talvela)(?:\s|$)/i, () => ({ type: 'season' as DeadlineType, value: `talvi-${deadlineYear('talvi')}` })],
 ]
 
 // ─── Public API ──────────────────────────────────────────────────────────────
