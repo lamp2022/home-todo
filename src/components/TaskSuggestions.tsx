@@ -97,7 +97,7 @@ export function TaskSuggestions() {
                 key={s.title}
                 type="button"
                 onClick={() => handleAdd(s)}
-                className="px-3 py-1.5 bg-white rounded-xl text-xs text-gray-600 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-shadow border border-gray-100"
+                className="px-3 py-1.5 bg-white rounded-xl text-xs text-gray-600 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] active:bg-gray-50 transition-shadow border border-gray-100"
               >
                 {s.title}
                 {s.hint && <span className="text-gray-400 ml-1">· {s.hint}</span>}

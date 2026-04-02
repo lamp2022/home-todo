@@ -19,7 +19,7 @@ export function TaskCard({ task, color, onCheck }: { task: Task; color: string; 
           checked={done}
           onChange={(e) => { e.stopPropagation(); onCheck() }}
           onClick={(e) => e.stopPropagation()}
-          className="shrink-0 w-4 h-4 rounded-md border-gray-300 text-accent focus:ring-accent/30 cursor-pointer"
+          className="shrink-0 w-5 h-5 rounded-md border-gray-300 text-accent focus:ring-accent/30 cursor-pointer"
         />
       )}
       <span className={`truncate text-sm ${done ? 'line-through text-gray-400' : 'text-gray-700'}`}>{task.title}</span>

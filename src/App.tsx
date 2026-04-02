@@ -11,8 +11,8 @@ export default function App() {
     <StoreProvider>
       <div className="flex min-h-svh bg-surface">
         <Sidebar />
-        <main className="flex-1 flex flex-col pb-16 md:pb-0">
-          <div className="mx-auto w-full max-w-lg flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col min-w-0 overflow-hidden pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0">
+          <div className="mx-auto w-full max-w-lg flex-1 flex flex-col min-w-0">
             <Routes>
               <Route path="/tasks" element={<TasksPage />} />
               <Route path="/done" element={<DonePage />} />

@@ -5,7 +5,7 @@ import { weekOptions } from '../lib/Deadline'
 const YEARS = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() + i)
 
 const CHIP_SELECTED = 'bg-teal-100 text-teal-800 ring-1 ring-teal-300 font-semibold'
-const CHIP_DEFAULT = 'bg-gray-50 text-gray-600 hover:bg-teal-50 hover:text-teal-700'
+const CHIP_DEFAULT = 'bg-gray-50 text-gray-600 hover:bg-teal-50 hover:text-teal-700 active:bg-teal-100'
 
 const WEEKDAY_NAMES = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su']
 const MONTH_NAMES = ['Tammi', 'Helmi', 'Maalis', 'Huhti', 'Touko', 'Kesä', 'Heinä', 'Elo', 'Syys', 'Loka', 'Marras', 'Joulu']
@@ -47,12 +47,12 @@ function MiniCalendar({ year, month, selected, onSelect }: {
             key={i}
             type="button"
             onClick={() => onSelect(value)}
-            className={`py-1.5 rounded-lg text-[13px] font-medium transition-colors ${
+            className={`py-2.5 rounded-lg text-[13px] font-medium transition-colors ${
               isSelected
                 ? 'bg-teal-500 text-white shadow-sm'
                 : isToday
                   ? 'bg-teal-50 text-teal-700 ring-1 ring-teal-300'
-                  : 'text-gray-600 hover:bg-gray-100'
+                  : 'text-gray-600 hover:bg-gray-100 active:bg-gray-200'
             }`}
           >
             {day}

@@ -1,5 +1,5 @@
 const CHIP_SELECTED = 'bg-teal-100 text-teal-800 ring-1 ring-teal-300 font-semibold'
-const CHIP_DEFAULT = 'bg-gray-50 text-gray-600 hover:bg-teal-50 hover:text-teal-700'
+const CHIP_DEFAULT = 'bg-gray-50 text-gray-600 hover:bg-teal-50 hover:text-teal-700 active:bg-teal-100'
 
 const INTERVALS = [
   ['weekly', 'Viikoittain'],

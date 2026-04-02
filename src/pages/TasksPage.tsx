@@ -45,7 +45,7 @@ export function TasksPage() {
             <button
               type="button"
               onClick={() => setViewMode('category')}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+              className={`px-3 py-2.5 rounded-full text-xs font-medium transition-colors ${
                 viewMode === 'category' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-500'
               }`}
             >
@@ -54,7 +54,7 @@ export function TasksPage() {
             <button
               type="button"
               onClick={() => setViewMode('time')}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+              className={`px-3 py-2.5 rounded-full text-xs font-medium transition-colors ${
                 viewMode === 'time' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-500'
               }`}
             >
