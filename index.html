@@ -16,7 +16,9 @@
         if (p) {
           q.delete('p')
           var rest = q.toString()
-          history.replaceState(null, '', p + (rest ? '?' + rest : ''))
+          var base = '/home-todo'
+          var fullPath = base + p + (rest ? '?' + rest : '')
+          history.replaceState(null, '', fullPath)
         }
       })()
     </script>

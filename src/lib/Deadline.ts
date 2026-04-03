@@ -45,6 +45,14 @@ export function getISOWeek(date: Date): number {
   return 1 + Math.round(((d.getTime() - week1.getTime()) / DAY_MS - 3 + ((week1.getDay() + 6) % 7)) / 7)
 }
 
+/** Returns the Monday of the given ISO week */
+function isoWeekToDate(year: number, week: number): Date {
+  const jan4 = new Date(year, 0, 4)
+  const dayOfWeek = (jan4.getDay() + 6) % 7 // 0=Mon
+  const week1Monday = new Date(jan4.getTime() - dayOfWeek * DAY_MS)
+  return new Date(week1Monday.getTime() + (week - 1) * 7 * DAY_MS)
+}
+
 export function getCurrentSeason(date: Date): Season {
   const month = date.getMonth() + 1
   if (month >= 3 && month <= 5) return 'kevät'
@@ -84,8 +92,7 @@ function deadlineToSortDate(task: Task): number {
       return new Date(value).getTime()
     case 'week': {
       const [y, w] = value.split('-W').map(Number)
-      const jan1 = new Date(y, 0, 1)
-      return jan1.getTime() + (w - 1) * 7 * DAY_MS
+      return isoWeekToDate(y, w).getTime()
     }
     case 'month': {
       const [y, m] = value.split('-').map(Number)
@@ -227,8 +234,8 @@ export function isOverdue(task: Task, now: Date = new Date()): boolean {
       return new Date(value) < now
     case 'week': {
       const [y, w] = value.split('-W').map(Number)
-      const jan1 = new Date(y, 0, 1)
-      const weekEnd = new Date(jan1.getTime() + w * 7 * DAY_MS)
+      const weekStart = isoWeekToDate(y, w)
+      const weekEnd = new Date(weekStart.getTime() + 7 * DAY_MS)
       return weekEnd < now
     }
     case 'month': {

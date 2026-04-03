@@ -3,8 +3,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-export default defineConfig({
-  base: '/home-todo/',
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? '/home-todo/' : '/',
   plugins: [react(), tailwindcss()],
   test: {
     globals: true,
@@ -12,4 +12,4 @@ export default defineConfig({
     setupFiles: './src/test-setup.ts',
     css: true,
   },
-})
+}))
