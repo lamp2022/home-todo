@@ -263,6 +263,66 @@ export function sortByDeadline(tasks: Task[], now: Date = new Date()): Task[] {
   })
 }
 
+export type TimeGroup = 'overdue' | 'thisWeek' | 'nextWeek' | 'thisMonth' | 'later' | 'noDeadline'
+
+export const TIME_GROUP_LABELS: Record<TimeGroup, string> = {
+  overdue: 'Myöhässä',
+  thisWeek: 'Tällä viikolla',
+  nextWeek: 'Ensi viikolla',
+  thisMonth: 'Tässä kuussa',
+  later: 'Myöhemmin',
+  noDeadline: 'Ei deadlinea',
+}
+
+export function groupByTimeframe(
+  tasks: Task[],
+  now: Date = new Date()
+): { group: TimeGroup; label: string; tasks: Task[] }[] {
+  const currentWeek = getISOWeek(now)
+  const currentYear = now.getFullYear()
+  const weekMonday = isoWeekToDate(currentYear, currentWeek)
+  const thisWeekEnd = new Date(weekMonday.getTime() + 7 * DAY_MS)
+  const nextWeekEnd = new Date(weekMonday.getTime() + 14 * DAY_MS)
+  const thisMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+
+  const buckets: Record<TimeGroup, Task[]> = {
+    overdue: [],
+    thisWeek: [],
+    nextWeek: [],
+    thisMonth: [],
+    later: [],
+    noDeadline: [],
+  }
+
+  for (const task of tasks) {
+    if (task.deadline.type === null) {
+      buckets.noDeadline.push(task)
+    } else if (isOverdue(task, now)) {
+      buckets.overdue.push(task)
+    } else {
+      const sortDate = deadlineToSortDate(task)
+      if (sortDate < thisWeekEnd.getTime()) {
+        buckets.thisWeek.push(task)
+      } else if (sortDate < nextWeekEnd.getTime()) {
+        buckets.nextWeek.push(task)
+      } else if (sortDate <= thisMonthEnd.getTime()) {
+        buckets.thisMonth.push(task)
+      } else {
+        buckets.later.push(task)
+      }
+    }
+  }
+
+  const order: TimeGroup[] = ['overdue', 'thisWeek', 'nextWeek', 'thisMonth', 'later', 'noDeadline']
+  return order
+    .filter((g) => buckets[g].length > 0)
+    .map((g) => ({
+      group: g,
+      label: TIME_GROUP_LABELS[g],
+      tasks: sortByDeadline(buckets[g], now),
+    }))
+}
+
 export function weekOptions(count = 24, from: Date = new Date()): { label: string; value: string }[] {
   const startWeek = getISOWeek(from)
   const year = from.getFullYear()

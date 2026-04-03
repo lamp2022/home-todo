@@ -12,7 +12,7 @@ const QUICK_DEADLINES: { label: string; get: () => Task['deadline'] }[] = [
   { label: 'Ensi kk', get: nextMonthDeadline },
 ]
 
-export function QuickInput() {
+export function QuickInput({ onTaskCreated }: { onTaskCreated?: (taskId: string) => void } = {}) {
   const { addTask } = useStore()
   const [title, setTitle] = useState('')
   const [pending, setPending] = useState<Task['deadline']>({ type: null, value: null })
@@ -26,14 +26,14 @@ export function QuickInput() {
     }
   }
 
-  function handleSubmit() {
+  function handleSubmit(openSheet = false) {
     const trimmed = title.trim()
     if (!trimmed) return
     const scrollY = window.scrollY
     const parsed = parseInput(trimmed)
     const category = suggestCategory(trimmed) ?? 'Muu'
     const deadline = pending.type ? pending : parsed.deadline
-    addTask({
+    const task = addTask({
       title: parsed.title,
       category,
       deadline,
@@ -42,10 +42,14 @@ export function QuickInput() {
     })
     setTitle('')
     setPending({ type: null, value: null })
-    requestAnimationFrame(() => {
-      window.scrollTo(0, scrollY)
-      inputRef.current?.focus()
-    })
+    if (openSheet) {
+      onTaskCreated?.(task.id)
+    } else {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY)
+        inputRef.current?.focus()
+      })
+    }
   }
 
   function toggleDeadline(get: () => Task['deadline']) {
@@ -65,7 +69,7 @@ export function QuickInput() {
           type="text"
           value={title}
           onChange={(e) => handleChange(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit(false)}
           enterKeyHint="done"
           autoComplete="off"
           placeholder="Lisää tehtävä..."
@@ -74,7 +78,7 @@ export function QuickInput() {
         {title.trim() && (
           <button
             type="button"
-            onClick={handleSubmit}
+            onClick={() => handleSubmit(true)}
             aria-label="Lisää tehtävä"
             className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg bg-teal-500 text-white active:bg-teal-600 transition-colors"
           >

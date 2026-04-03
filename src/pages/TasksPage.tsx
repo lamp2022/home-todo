@@ -6,7 +6,7 @@ import { SeasonalSection } from '../components/SeasonalSection'
 import { CategoryGroup } from '../components/CategoryGroup'
 import { TaskSheet } from '../components/TaskSheet'
 import { getCategoryColor } from '../lib/CategoryService'
-import { sortByDeadline, formatDeadline } from '../lib/Deadline'
+import { sortByDeadline, formatDeadline, groupByTimeframe } from '../lib/Deadline'
 import { TaskSuggestions } from '../components/TaskSuggestions'
 import { getRecentlyDone, getEncouragementPositions } from '../lib/completionStats'
 
@@ -37,7 +37,7 @@ export function TasksPage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <QuickInput />
+      <QuickInput onTaskCreated={(id) => setEditingTaskId(id)} />
       <Carousel tasks={activeTasks} />
       <div className="flex-1 p-4">
         {(activeTasks.length > 0 || recentlyDone.length > 0) && (
@@ -82,20 +82,29 @@ export function TasksPage() {
             {sorted.length === 0 && recentlyDone.length === 0 && (
               <p className="text-gray-400 text-sm text-center mt-8">Ei tehtäviä</p>
             )}
-            <div className="flex flex-col gap-1.5">
-              {sorted.map((task) => {
-                const dl = formatDeadline(task)
-                return (
-                  <div key={task.id} onClick={() => setEditingTaskId(task.id)} className="cursor-pointer">
-                    <div className="grid grid-cols-[3px_1fr_auto] items-center py-3 px-3 gap-3 bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                      <div className="h-8 rounded-full" style={{ backgroundColor: getCategoryColor(task.category, categories) }} />
-                      <span className="truncate text-sm text-gray-700">{task.title}</span>
-                      <span className="text-xs text-gray-400">{dl || '—'}</span>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+            {groupByTimeframe(sorted).map(({ group, label, tasks: groupTasks }) => (
+              <div key={group} className="mb-4">
+                <h3 className={`text-[11px] font-bold uppercase tracking-wider mb-2 px-1 ${
+                  group === 'overdue' ? 'text-rose-500' : 'text-gray-400'
+                }`}>
+                  {label}
+                </h3>
+                <div className="flex flex-col gap-1.5">
+                  {groupTasks.map((task) => {
+                    const dl = formatDeadline(task)
+                    return (
+                      <div key={task.id} onClick={() => setEditingTaskId(task.id)} className="cursor-pointer">
+                        <div className="grid grid-cols-[3px_1fr_auto] items-center py-3 px-3 gap-3 bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                          <div className="h-8 rounded-full" style={{ backgroundColor: getCategoryColor(task.category, categories) }} />
+                          <span className="truncate text-sm text-gray-700">{task.title}</span>
+                          <span className="text-xs text-gray-400">{dl || '—'}</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
           </>
         )}
 

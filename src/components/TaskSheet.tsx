@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Task } from '../types'
 import { useStore } from '../store/StoreContext'
 import { DeadlinePicker } from './DeadlinePicker'
@@ -13,6 +13,10 @@ export function TaskSheet({ taskId, onClose }: Props) {
   const { tasks, updateTask, deleteTask, categories, persons } = useStore()
   const task = tasks.find((t) => t.id === taskId)
   const [title, setTitle] = useState(task?.title ?? '')
+  const sheetRef = useRef<HTMLDivElement>(null)
+  const touchStartY = useRef(0)
+  const [translateY, setTranslateY] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -46,6 +50,28 @@ export function TaskSheet({ taskId, onClose }: Props) {
     }
   }
 
+  function handleTouchStart(e: React.TouchEvent<HTMLDivElement>) {
+    if (sheetRef.current?.scrollTop === 0) {
+      touchStartY.current = e.touches[0].clientY
+      setIsDragging(true)
+    }
+  }
+
+  function handleTouchMove(e: React.TouchEvent<HTMLDivElement>) {
+    if (!isDragging) return
+    const deltaY = e.touches[0].clientY - touchStartY.current
+    setTranslateY(Math.max(0, deltaY))
+  }
+
+  function handleTouchEnd() {
+    if (translateY > 100) {
+      onClose()
+    } else {
+      setTranslateY(0)
+    }
+    setIsDragging(false)
+  }
+
   function handleDelete() {
     if (confirm('Poistetaanko tehtävä?')) {
       deleteTask(task!.id)
@@ -60,7 +86,17 @@ export function TaskSheet({ taskId, onClose }: Props) {
         className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-20"
         onClick={onClose}
       />
-      <div className="fixed bottom-0 inset-x-0 max-h-[85vh] min-h-[60vh] bg-white rounded-t-3xl z-30 p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] flex flex-col gap-3 overflow-y-auto shadow-[0_-4px_30px_rgba(0,0,0,0.08)]">
+      <div
+        ref={sheetRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        style={{
+          transform: translateY > 0 ? `translateY(${translateY}px)` : undefined,
+          transition: isDragging ? 'none' : 'transform 300ms ease-out',
+        }}
+        className="fixed bottom-0 inset-x-0 max-h-[85vh] min-h-[60vh] bg-white rounded-t-3xl z-30 p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] flex flex-col gap-3 overflow-y-auto shadow-[0_-4px_30px_rgba(0,0,0,0.08)]"
+      >
         <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto shrink-0" />
 
         <input
