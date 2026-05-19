@@ -767,6 +767,12 @@ function renderSliders() {
     const input = document.getElementById('sl-' + d.key);
     input.addEventListener('input', (e) => {
       state[d.key] = parseFloat(e.target.value);
+      if (['hinta', 'arvonnousu', 'myyntiVuosi'].includes(d.key)) {
+        const autoPrice = state.hinta * Math.pow(1 + state.arvonnousu / 100, state.myyntiVuosi);
+        state.myyntihinta = Math.round(autoPrice / 500) * 500;
+        const sl = document.getElementById('sl-myyntihinta');
+        if (sl) sl.value = state.myyntihinta;
+      }
       compute();
     });
   });
@@ -1029,6 +1035,9 @@ function compute() {
 }
 
 renderSliders();
+// Sync myyntihinta to market value at startup
+state.myyntihinta = Math.round(state.hinta * Math.pow(1 + state.arvonnousu / 100, state.myyntiVuosi) / 500) * 500;
+document.getElementById('sl-myyntihinta').value = state.myyntihinta;
 compute();
 </script>
 
