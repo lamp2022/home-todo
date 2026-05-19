@@ -656,7 +656,7 @@ line-height: 1.6;
                 <th class="right">Lyhennys</th>
                 <th class="right">Kassavirta</th>
                 <th class="right">Lainasaldo</th>
-                <th class="right">Oma osuus</th>
+                <th class="right">Talon hinta</th>
                 <th class="right">IRR %</th>
                 <th class="right">Tuotto %</th>
                 <th class="right">Voitto €</th>
@@ -984,7 +984,7 @@ function compute() {
       <td class="right">${fmt(v.lyhennys)}</td>
       <td class="right ${cfClass}" style="font-weight:500;">${fmt(v.kassavirta)}</td>
       <td class="right">${fmt(v.lainasaldo)}</td>
-      <td class="right bold">${fmt(v.oma)}</td>
+      <td class="right bold">${fmt(v.taloArvo)}</td>
       <td class="right ${irrClass}" style="font-weight:600;">${yearIrr.toFixed(1)} %</td>
       <td class="right ${retClass}" style="font-weight:600;">${yearTotalReturn.toFixed(0)} %</td>
       <td class="right ${retClass}">${fmtSigned(yearProfit)}</td>
@@ -1011,7 +1011,7 @@ function compute() {
         <div class="year-card-row"><span class="lbl ${retClass}">Tuotto %</span><span class="val ${retClass}">${yearTotalReturn.toFixed(0)} %</span></div>
         <div class="year-card-row"><span class="lbl ${retClass}">Voitto €</span><span class="val ${retClass}">${fmtSigned(yearProfit)}</span></div>
         <div class="year-card-row"><span class="lbl ${stockClass}">Osakkeet 8%</span><span class="val ${stockClass}">${fmt(stockValue)} €</span></div>
-        <div class="year-card-total"><span class="lbl">Oma osuus</span><span class="val">${fmt(v.oma)} €</span></div>
+        <div class="year-card-total"><span class="lbl">Talon hinta</span><span class="val">${fmt(v.taloArvo)} €</span></div>
       </div>
     `;
     cards.appendChild(card);
