@@ -657,6 +657,10 @@ line-height: 1.6;
                 <th class="right">Kassavirta</th>
                 <th class="right">Lainasaldo</th>
                 <th class="right">Oma osuus</th>
+                <th class="right">IRR %</th>
+                <th class="right">Tuotto %</th>
+                <th class="right">Voitto €</th>
+                <th class="right">Osakkeet 8%</th>
               </tr>
             </thead>
             <tbody id="table-body"></tbody>
@@ -955,6 +959,22 @@ function compute() {
     const cfClass = v.kassavirta >= 0 ? 'pos' : 'neg';
     const cfSign = v.kassavirta >= 0 ? '+' : '';
 
+    // Per-year IRR and total return assuming sale at market value this year
+    const yearSalePrice = v.taloArvo;
+    const yearNetSale = yearSalePrice - v.lainasaldo;
+    const yearProfit = yearNetSale + v.kumKassavirta - omaPaaoma;
+    const yearTotalReturn = omaPaaoma > 0 ? (yearProfit / omaPaaoma) * 100 : 0;
+    const yearFlows = [-omaPaaoma];
+    for (let j = 0; j <= i; j++) {
+      const jcf = vuodet[j].kassavirta;
+      yearFlows.push(j === i ? jcf + (yearSalePrice - vuodet[j].lainasaldo) : jcf);
+    }
+    const yearIrr = omaPaaoma > 0 ? computeIRR(yearFlows) * 100 : 0;
+    const irrClass = yearIrr >= 0 ? 'pos' : 'neg';
+    const retClass = yearTotalReturn >= 0 ? 'pos' : 'neg';
+    const stockValue = omaPaaoma * Math.pow(1.08, v.vuosi);
+    const stockClass = stockValue > (omaPaaoma + yearProfit) ? 'neg' : 'pos';
+
     const tr = document.createElement('tr');
     if (isSale) tr.className = 'sale-row';
     tr.innerHTML = `
@@ -965,6 +985,10 @@ function compute() {
       <td class="right ${cfClass}" style="font-weight:500;">${fmt(v.kassavirta)}</td>
       <td class="right">${fmt(v.lainasaldo)}</td>
       <td class="right bold">${fmt(v.oma)}</td>
+      <td class="right ${irrClass}" style="font-weight:600;">${yearIrr.toFixed(1)} %</td>
+      <td class="right ${retClass}" style="font-weight:600;">${yearTotalReturn.toFixed(0)} %</td>
+      <td class="right ${retClass}">${fmtSigned(yearProfit)}</td>
+      <td class="right ${stockClass}">${fmt(stockValue)} €</td>
     `;
     tbody.appendChild(tr);
 
@@ -983,6 +1007,10 @@ function compute() {
         <div class="year-card-row"><span class="lbl">Korot</span><span class="val">${fmt(v.korot)}</span></div>
         <div class="year-card-row"><span class="lbl">Lyhennys</span><span class="val">${fmt(v.lyhennys)}</span></div>
         <div class="year-card-row"><span class="lbl">Laina</span><span class="val">${fmt(v.lainasaldo)}</span></div>
+        <div class="year-card-row"><span class="lbl ${irrClass}">IRR</span><span class="val ${irrClass}">${yearIrr.toFixed(1)} %</span></div>
+        <div class="year-card-row"><span class="lbl ${retClass}">Tuotto %</span><span class="val ${retClass}">${yearTotalReturn.toFixed(0)} %</span></div>
+        <div class="year-card-row"><span class="lbl ${retClass}">Voitto €</span><span class="val ${retClass}">${fmtSigned(yearProfit)}</span></div>
+        <div class="year-card-row"><span class="lbl ${stockClass}">Osakkeet 8%</span><span class="val ${stockClass}">${fmt(stockValue)} €</span></div>
         <div class="year-card-total"><span class="lbl">Oma osuus</span><span class="val">${fmt(v.oma)} €</span></div>
       </div>
     `;
