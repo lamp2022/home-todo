@@ -657,6 +657,8 @@ line-height: 1.6;
                 <th class="right">Kassavirta</th>
                 <th class="right">Lainasaldo</th>
                 <th class="right">Talon hinta</th>
+                <th class="right">Oma pääoma</th>
+                <th class="right">Kasvu €/v</th>
                 <th class="right">IRR %</th>
                 <th class="right">Tuotto %</th>
                 <th class="right">Voitto €</th>
@@ -980,6 +982,11 @@ function compute() {
     const retClass = yearTotalReturn >= 0 ? 'pos' : 'neg';
     const stockValue = omaPaaoma * Math.pow(1.08, v.vuosi);
     const stockClass = stockValue > (omaPaaoma + yearProfit) ? 'neg' : 'pos';
+    // Total accumulated oma pääoma = equity in property + all cash received
+    const kertynyt = v.oma + v.kumKassavirta;
+    const prevKertynyt = i === 0 ? omaPaaoma : vuodet[i - 1].oma + vuodet[i - 1].kumKassavirta;
+    const kasvuVuosi = kertynyt - prevKertynyt;
+    const kasvuClass = kasvuVuosi >= 0 ? 'pos' : 'neg';
 
     const tr = document.createElement('tr');
     if (isSale) tr.className = 'sale-row';
@@ -991,6 +998,8 @@ function compute() {
       <td class="right ${cfClass}" style="font-weight:500;">${fmt(v.kassavirta)}</td>
       <td class="right">${fmt(v.lainasaldo)}</td>
       <td class="right bold">${fmt(v.taloArvo)}</td>
+      <td class="right bold">${fmt(kertynyt)}</td>
+      <td class="right ${kasvuClass}">${fmtSigned(kasvuVuosi)}</td>
       <td class="right ${irrClass}" style="font-weight:600;">${yearIrr.toFixed(1)} %</td>
       <td class="right ${retClass}" style="font-weight:600;">${yearTotalReturn.toFixed(0)} %</td>
       <td class="right ${retClass}">${fmtSigned(yearProfit)}</td>
@@ -1013,6 +1022,8 @@ function compute() {
         <div class="year-card-row"><span class="lbl">Korot</span><span class="val">${fmt(v.korot)}</span></div>
         <div class="year-card-row"><span class="lbl">Lyhennys</span><span class="val">${fmt(v.lyhennys)}</span></div>
         <div class="year-card-row"><span class="lbl">Laina</span><span class="val">${fmt(v.lainasaldo)}</span></div>
+        <div class="year-card-row"><span class="lbl">Oma pääoma</span><span class="val">${fmt(kertynyt)} €</span></div>
+        <div class="year-card-row"><span class="lbl ${kasvuClass}">Kasvu €/v</span><span class="val ${kasvuClass}">${fmtSigned(kasvuVuosi)}</span></div>
         <div class="year-card-row"><span class="lbl ${irrClass}">IRR</span><span class="val ${irrClass}">${yearIrr.toFixed(1)} %</span></div>
         <div class="year-card-row"><span class="lbl ${retClass}">Tuotto %</span><span class="val ${retClass}">${yearTotalReturn.toFixed(0)} %</span></div>
         <div class="year-card-row"><span class="lbl ${retClass}">Voitto €</span><span class="val ${retClass}">${fmtSigned(yearProfit)}</span></div>
