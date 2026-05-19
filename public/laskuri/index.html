@@ -475,7 +475,7 @@ line-height: 1.6;
   <!-- Lopputuotto -->
 
   <div class="card-dark">
-    <div class="label-sm label-amber">Lopputuotto vuonna <span id="hero-myyntiVuosi">15</span></div>
+    <div class="label-sm label-amber">Lopputuotto vuonna <span id="hero-myyntiVuosi">—</span></div>
     <div class="grid-2">
       <div>
         <div class="hero-label">Kokonaisvoitto</div>
@@ -947,7 +947,7 @@ function compute() {
     year13Card.style.display = 'none';
   }
 
-  // Taulukko ja kortit vuodet 10-15
+  // Taulukko ja kortit kaikki vuodet
   const tbody = document.getElementById('table-body');
   const cards = document.getElementById('year-cards');
   tbody.innerHTML = '';
