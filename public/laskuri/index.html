@@ -1018,16 +1018,16 @@ function compute() {
         <span class="${cfClass}" style="font-weight:700; font-size:13px;" class="tabular">${cfSign}${fmt(v.kassavirta)} €</span>
       </div>
       <div class="year-card-grid">
-        <div class="year-card-row" style="grid-column:span 2"><span class="lbl">Vuokra</span><span class="val">${fmt(v.vuokraTulot)}</span></div>
-        <div class="year-card-row" style="grid-column:span 2"><span class="lbl">Korot</span><span class="val">${fmt(v.korot)}</span></div>
-        <div class="year-card-row" style="grid-column:span 2"><span class="lbl">Lyhennys</span><span class="val">${fmt(v.lyhennys)}</span></div>
-        <div class="year-card-row" style="grid-column:span 2"><span class="lbl">Laina</span><span class="val">${fmt(v.lainasaldo)}</span></div>
+        <div class="year-card-row"><span class="lbl">Vuokra</span><span class="val">${fmt(v.vuokraTulot)}</span></div>
+        <div class="year-card-row"><span class="lbl">Korot</span><span class="val">${fmt(v.korot)}</span></div>
+        <div class="year-card-row"><span class="lbl">Lyhennys</span><span class="val">${fmt(v.lyhennys)}</span></div>
+        <div class="year-card-row"><span class="lbl">Laina</span><span class="val">${fmt(v.lainasaldo)}</span></div>
         <div class="year-card-row"><span class="lbl">Oma pääoma</span><span class="val">${fmt(kertynyt)} €</span></div>
         <div class="year-card-row"><span class="lbl ${stockClass}">Osakkeet 8%</span><span class="val ${stockClass}">${fmt(stockValue)} €</span></div>
-        <div class="year-card-row" style="grid-column:span 2"><span class="lbl ${kasvuClass}">Kasvu €/v</span><span class="val ${kasvuClass}">${fmtSigned(kasvuVuosi)}</span></div>
-        <div class="year-card-row" style="grid-column:span 2"><span class="lbl ${irrClass}">IRR</span><span class="val ${irrClass}">${yearIrr.toFixed(1)} %</span></div>
-        <div class="year-card-row" style="grid-column:span 2"><span class="lbl ${retClass}">Tuotto %</span><span class="val ${retClass}">${yearTotalReturn.toFixed(0)} %</span></div>
-        <div class="year-card-row" style="grid-column:span 2"><span class="lbl ${retClass}">Voitto €</span><span class="val ${retClass}">${fmtSigned(yearProfit)}</span></div>
+        <div class="year-card-row"><span class="lbl ${kasvuClass}">Kasvu €/v</span><span class="val ${kasvuClass}">${fmtSigned(kasvuVuosi)}</span></div>
+        <div class="year-card-row"><span class="lbl ${irrClass}">IRR</span><span class="val ${irrClass}">${yearIrr.toFixed(1)} %</span></div>
+        <div class="year-card-row"><span class="lbl ${retClass}">Tuotto %</span><span class="val ${retClass}">${yearTotalReturn.toFixed(0)} %</span></div>
+        <div class="year-card-row"><span class="lbl ${retClass}">Voitto €</span><span class="val ${retClass}">${fmtSigned(yearProfit)}</span></div>
         <div class="year-card-total"><span class="lbl">Arvo €</span><span class="val">${fmt(v.taloArvo)} €</span></div>
       </div>
     `;
