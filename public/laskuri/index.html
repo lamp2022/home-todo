@@ -585,13 +585,13 @@ line-height: 1.6;
     <div class="info-box-dark" id="loan-end-info">—</div>
   </div>
 
-  <!-- Ensimmäinen velaton vuosi (dynaaminen) -->
+  <!-- Vuosi 13 -->
 
   <div class="card-amber" id="year13-card">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom: 16px;">
       <div>
         <div class="label-sm" style="color: var(--amber-800);">Yhteenveto · ensimmäinen velaton vuosi</div>
-        <div class="hero-num" style="color: var(--stone-900);" id="y13-title">Vuosi —</div>
+        <div class="hero-num" style="color: var(--stone-900);" id="y13-title">Vuosi 13</div>
       </div>
       <div style="text-align:right;">
         <div class="hero-label">Kassavirta</div>
@@ -657,6 +657,10 @@ line-height: 1.6;
                 <th class="right">Kassavirta</th>
                 <th class="right">Lainasaldo</th>
                 <th class="right">Oma osuus</th>
+                <th class="right">IRR %</th>
+                <th class="right">Tuotto %</th>
+                <th class="right">Voitto €</th>
+                <th class="right">Osakkeet 8%</th>
               </tr>
             </thead>
             <tbody id="table-body"></tbody>
@@ -678,6 +682,7 @@ line-height: 1.6;
 </div>
 
 <script>
+// State
 const state = {
   hinta: 135000,
   vuokra: 850,
@@ -826,6 +831,7 @@ function compute() {
     vuosituotto = multiple <= 0 ? -99.9 : (Math.pow(multiple, 1 / myyntiVuosi) - 1) * 100;
   }
 
+  // IRR: year-by-year cash flows, terminal year includes net sale proceeds
   const irrFlows = [-omaPaaoma];
   for (let i = 0; i < myyntiVuosi; i++) {
     const cf = vuodet[i].kassavirta;
@@ -833,15 +839,18 @@ function compute() {
   }
   const irr = omaPaaoma > 0 ? computeIRR(irrFlows) * 100 : 0;
 
+  // Erittely — use (omaPaaoma + velka) as cost basis so components always sum to kokonaisVoitto
   const lyhennysOsuus = myynti.kumLyhennys;
   const arvonmuutos = myyntihinta - (omaPaaoma + velka);
   const kassavirtaOsuus = myynti.kumKassavirta;
 
+  // Päivitä slider-arvot
   [...sliderDefs, ...saleSliderDefs].forEach(d => {
     const el = document.getElementById('val-' + d.key);
     if (el) el.textContent = state[d.key].toLocaleString('fi-FI') + ' ' + d.unit;
   });
 
+  // Hero
   document.getElementById('hero-myyntiVuosi').textContent = myyntiVuosi;
   document.getElementById('hero-voitto').textContent = fmtEur(kokonaisVoitto);
   document.getElementById('hero-vuosituotto').textContent = vuosituotto.toFixed(2) + ' %';
@@ -854,6 +863,7 @@ function compute() {
   document.getElementById('hero-irr').textContent = irr.toFixed(2) + ' %';
   document.getElementById('hero-total').textContent = totalReturn.toFixed(1) + ' %';
 
+  // Erittely
   document.getElementById('erittely-intro').textContent =
     `${myyntiVuosi} vuoden aikana omasta ${fmtEur(omaPaaoma)} pääomasta tulee ${fmtEur(omaPaaoma + kokonaisVoitto)}`;
 
@@ -882,6 +892,7 @@ function compute() {
   document.getElementById('er-info').innerHTML =
     `<strong>Vipuvaikutus:</strong> Lyhennysosuus ${fmtEur(lyhennysOsuus)} on isompi kuin oma pääoma ${fmtEur(omaPaaoma)} — vuokralaiset maksavat sinulle ${((lyhennysOsuus / omaPaaoma) * 100).toFixed(0)} % alkupääomasta takaisin pelkän lainan lyhennyksen kautta. Tämä on velkavivun ydin.`;
 
+  // Lainan loppuminen
   const lainaLoppuuIdx = vuodet.findIndex(v => v.lainasaldo === 0);
   const lainaLoppuuVuosi = lainaLoppuuIdx + 1;
   const loanCard = document.getElementById('loan-end-card');
@@ -907,6 +918,7 @@ function compute() {
     loanCard.style.display = 'none';
   }
 
+  // Ensimmäinen velaton vuosi (dynaaminen, ei hardkoodattu vuoteen 13)
   const velattomVuosiNum = lainaLoppuuIdx >= 0 ? lainaLoppuuVuosi + 1 : null;
   const yVelaton = velattomVuosiNum ? vuodet[velattomVuosiNum - 1] : null;
   const year13Card = document.getElementById('year13-card');
@@ -935,6 +947,7 @@ function compute() {
     year13Card.style.display = 'none';
   }
 
+  // Taulukko ja kortit vuodet 10-15
   const tbody = document.getElementById('table-body');
   const cards = document.getElementById('year-cards');
   tbody.innerHTML = '';
@@ -946,6 +959,22 @@ function compute() {
     const cfClass = v.kassavirta >= 0 ? 'pos' : 'neg';
     const cfSign = v.kassavirta >= 0 ? '+' : '';
 
+    // Per-year IRR and total return assuming sale at market value this year
+    const yearSalePrice = v.taloArvo;
+    const yearNetSale = yearSalePrice - v.lainasaldo;
+    const yearProfit = yearNetSale + v.kumKassavirta - omaPaaoma;
+    const yearTotalReturn = omaPaaoma > 0 ? (yearProfit / omaPaaoma) * 100 : 0;
+    const yearFlows = [-omaPaaoma];
+    for (let j = 0; j <= i; j++) {
+      const jcf = vuodet[j].kassavirta;
+      yearFlows.push(j === i ? jcf + (yearSalePrice - vuodet[j].lainasaldo) : jcf);
+    }
+    const yearIrr = omaPaaoma > 0 ? computeIRR(yearFlows) * 100 : 0;
+    const irrClass = yearIrr >= 0 ? 'pos' : 'neg';
+    const retClass = yearTotalReturn >= 0 ? 'pos' : 'neg';
+    const stockValue = omaPaaoma * Math.pow(1.08, v.vuosi);
+    const stockClass = stockValue > (omaPaaoma + yearProfit) ? 'neg' : 'pos';
+
     const tr = document.createElement('tr');
     if (isSale) tr.className = 'sale-row';
     tr.innerHTML = `
@@ -956,6 +985,10 @@ function compute() {
       <td class="right ${cfClass}" style="font-weight:500;">${fmt(v.kassavirta)}</td>
       <td class="right">${fmt(v.lainasaldo)}</td>
       <td class="right bold">${fmt(v.oma)}</td>
+      <td class="right ${irrClass}" style="font-weight:600;">${yearIrr.toFixed(1)} %</td>
+      <td class="right ${retClass}" style="font-weight:600;">${yearTotalReturn.toFixed(0)} %</td>
+      <td class="right ${retClass}">${fmtSigned(yearProfit)}</td>
+      <td class="right ${stockClass}">${fmt(stockValue)} €</td>
     `;
     tbody.appendChild(tr);
 
@@ -967,19 +1000,24 @@ function compute() {
           <span class="year-card-title">Vuosi ${v.vuosi}</span>
           ${isSale ? '<span class="badge">Myynti</span>' : ''}
         </div>
-        <span class="${cfClass}" style="font-weight:700; font-size:13px;">${cfSign}${fmt(v.kassavirta)} €</span>
+        <span class="${cfClass}" style="font-weight:700; font-size:13px;" class="tabular">${cfSign}${fmt(v.kassavirta)} €</span>
       </div>
       <div class="year-card-grid">
         <div class="year-card-row"><span class="lbl">Vuokra</span><span class="val">${fmt(v.vuokraTulot)}</span></div>
         <div class="year-card-row"><span class="lbl">Korot</span><span class="val">${fmt(v.korot)}</span></div>
         <div class="year-card-row"><span class="lbl">Lyhennys</span><span class="val">${fmt(v.lyhennys)}</span></div>
         <div class="year-card-row"><span class="lbl">Laina</span><span class="val">${fmt(v.lainasaldo)}</span></div>
+        <div class="year-card-row"><span class="lbl ${irrClass}">IRR</span><span class="val ${irrClass}">${yearIrr.toFixed(1)} %</span></div>
+        <div class="year-card-row"><span class="lbl ${retClass}">Tuotto %</span><span class="val ${retClass}">${yearTotalReturn.toFixed(0)} %</span></div>
+        <div class="year-card-row"><span class="lbl ${retClass}">Voitto €</span><span class="val ${retClass}">${fmtSigned(yearProfit)}</span></div>
+        <div class="year-card-row"><span class="lbl ${stockClass}">Osakkeet 8%</span><span class="val ${stockClass}">${fmt(stockValue)} €</span></div>
         <div class="year-card-total"><span class="lbl">Oma osuus</span><span class="val">${fmt(v.oma)} €</span></div>
       </div>
     `;
     cards.appendChild(card);
   }
 
+  // Yhteenveto
   const summary = document.getElementById('summary-text');
   const v1cf = vuodet[0].kassavirta;
   const vLastcf = myynti.kassavirta;
