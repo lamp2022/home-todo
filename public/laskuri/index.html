@@ -471,7 +471,7 @@ line-height: 1.6;
     <div class="eyebrow">Asuntosijoitus · Skenaario</div>
     <div style="display:flex; align-items:baseline; gap:12px;">
       <h1>Sijoituslaskuri</h1>
-      <span style="font-size:11px; color:var(--stone-400); font-variant-numeric:tabular-nums;">v1.3</span>
+      <span style="font-size:11px; color:var(--stone-400); font-variant-numeric:tabular-nums;">v1.5</span>
     </div>
   </header>
 
@@ -641,6 +641,20 @@ line-height: 1.6;
         <div class="label-sm" style="color: var(--amber-800);">Myyntiskenaario</div>
         <div id="sale-sliders"></div>
       </div>
+      <div class="divider">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div class="slider-label">Yrityssijoitus</div>
+            <div style="font-size:11px; color:var(--stone-500); margin-top:2px;">Korkovähennys 20 % lisätään kassavirtaan</div>
+          </div>
+          <label style="position:relative; display:inline-block; width:40px; height:22px; flex-shrink:0;">
+            <input type="checkbox" id="toggle-yritys" style="opacity:0; width:0; height:0;">
+            <span id="toggle-track" style="position:absolute; cursor:pointer; inset:0; background:var(--stone-300); border-radius:22px; transition:.2s;"></span>
+            <span id="toggle-thumb" style="position:absolute; left:3px; top:3px; width:16px; height:16px; background:white; border-radius:50%; transition:.2s; box-shadow:0 1px 3px rgba(0,0,0,.3);"></span>
+          </label>
+        </div>
+        <div id="yritys-info" style="display:none; margin-top:10px; font-size:11px; color:var(--stone-600); background:var(--amber-50); border:1px solid var(--amber-200); border-radius:6px; padding:8px;" id="yritys-info"></div>
+      </div>
     </div>
 
     <!-- Taulukko + Yhteenveto -->
@@ -697,6 +711,7 @@ const state = {
   vuokrankorotus: 2,
   myyntiVuosi: 15,
   myyntihinta: 135000,
+  yritys: false,
 };
 
 const sliderDefs = [
@@ -809,7 +824,8 @@ function compute() {
     }
     const vuokraT = vuokra * 12 * Math.pow(1 + vuokrankorotus / 100, v - 1);
     const kuluT = kulut * 12 * Math.pow(1 + vuokrankorotus / 100, v - 1);
-    const cf = vuokraT - kuluT - vKorot - vLyhennys;
+    const veroetu = state.yritys ? vKorot * 0.20 : 0;
+    const cf = vuokraT - kuluT - vKorot - vLyhennys + veroetu;
     kumCF += cf;
     kumLyhennys += vLyhennys;
     const taloArvo = hinta * Math.pow(1 + arvonnousu / 100, v);
@@ -819,6 +835,7 @@ function compute() {
       kuluTulot: kuluT,
       korot: vKorot,
       lyhennys: vLyhennys,
+      veroetu: veroetu,
       kassavirta: cf,
       kumKassavirta: kumCF,
       kumLyhennys: kumLyhennys,
@@ -869,6 +886,17 @@ function compute() {
   document.getElementById('hero-era').textContent = fmtEur(kuukausiera);
   document.getElementById('hero-irr').textContent = irr.toFixed(2) + ' %';
   document.getElementById('hero-total').textContent = totalReturn.toFixed(1) + ' %';
+
+  // Yritys-info
+  const totalVeroetu = vuodet.slice(0, myyntiVuosi).reduce((s, v) => s + v.veroetu, 0);
+  const yritysInfo = document.getElementById('yritys-info');
+  if (state.yritys) {
+    yritysInfo.style.display = 'block';
+    const v1 = vuodet[0];
+    yritysInfo.innerHTML = `Vuosi 1: +${fmt(v1.veroetu)} €/v · Yhteensä ${myyntiVuosi} v: <strong>+${fmt(totalVeroetu)} €</strong> · Lisä ROE: <strong>+${(v1.veroetu / omaPaaoma * 100).toFixed(1)} %</strong> (v1) → <strong>+${(vuodet[Math.min(myyntiVuosi,12)-1].veroetu / omaPaaoma * 100).toFixed(1)} %</strong> (v${Math.min(myyntiVuosi,12)})`;
+  } else {
+    yritysInfo.style.display = 'none';
+  }
 
   // Erittely
   document.getElementById('erittely-intro').textContent =
@@ -1048,6 +1076,18 @@ state.myyntiVuosi = Math.min(state.lainaAika + 1, 20);
 document.getElementById('sl-myyntiVuosi').value = state.myyntiVuosi;
 state.myyntihinta = Math.round(state.hinta * Math.pow(1 + state.arvonnousu / 100, state.myyntiVuosi) / 500) * 500;
 document.getElementById('sl-myyntihinta').value = state.myyntihinta;
+
+// Yrityssijoitus toggle
+const toggleCb = document.getElementById('toggle-yritys');
+const toggleTrack = document.getElementById('toggle-track');
+const toggleThumb = document.getElementById('toggle-thumb');
+toggleCb.addEventListener('change', () => {
+  state.yritys = toggleCb.checked;
+  toggleTrack.style.background = state.yritys ? 'var(--amber-700)' : 'var(--stone-300)';
+  toggleThumb.style.left = state.yritys ? '21px' : '3px';
+  compute();
+});
+
 compute();
 </script>
 
