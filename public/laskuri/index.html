@@ -624,7 +624,7 @@ line-height: 1.6;
         <span style="font-weight:700; font-size: 16px; color: var(--stone-900);" id="y13-oma">—</span>
       </div>
       <div style="display:flex; justify-content:space-between; grid-column:span 2;">
-        <span style="font-size:11px; color: var(--stone-500);">Kumulatiivinen kassavirta vuoteen 13</span>
+        <span style="font-size:11px; color: var(--stone-500);" id="y13-kumcf-label">Kumulatiivinen kassavirta</span>
         <span style="font-size:11px; font-weight:600;" class="tabular" id="y13-kumcf">—</span>
       </div>
     </div>
@@ -914,26 +914,33 @@ function compute() {
     loanCard.style.display = 'none';
   }
 
-  // Vuosi 13
-  const y13 = vuodet[12];
-  if (y13) {
-    document.getElementById('y13-cf').textContent = (y13.kassavirta >= 0 ? '+' : '') + fmt(y13.kassavirta) + ' €';
-    document.getElementById('y13-cf').className = 'hero-num ' + (y13.kassavirta >= 0 ? 'text-emerald' : 'text-red');
-    document.getElementById('y13-cf-kk').textContent = '~' + fmt(y13.kassavirta / 12) + ' €/kk';
-    document.getElementById('y13-vuokra').textContent = '+' + fmt(y13.vuokraTulot) + ' €';
-    document.getElementById('y13-kulut').textContent = '−' + fmt(y13.kuluTulot) + ' €';
-    document.getElementById('y13-korot').textContent = '−' + fmt(y13.korot) + ' €';
-    document.getElementById('y13-lyhennys').textContent = '−' + fmt(y13.lyhennys) + ' €';
-    document.getElementById('y13-laina').textContent = fmt(y13.lainasaldo) + ' €';
-    document.getElementById('y13-arvo').textContent = fmt(y13.taloArvo) + ' €';
-    document.getElementById('y13-oma').textContent = fmt(y13.oma) + ' €';
+  // Ensimmäinen velaton vuosi (dynaaminen, ei hardkoodattu vuoteen 13)
+  const velattomVuosiNum = lainaLoppuuIdx >= 0 ? lainaLoppuuVuosi + 1 : null;
+  const yVelaton = velattomVuosiNum ? vuodet[velattomVuosiNum - 1] : null;
+  const year13Card = document.getElementById('year13-card');
+  if (yVelaton) {
+    year13Card.style.display = 'block';
+    document.getElementById('y13-title').textContent = 'Vuosi ' + velattomVuosiNum;
+    document.getElementById('y13-cf').textContent = (yVelaton.kassavirta >= 0 ? '+' : '') + fmt(yVelaton.kassavirta) + ' €';
+    document.getElementById('y13-cf').className = 'hero-num ' + (yVelaton.kassavirta >= 0 ? 'text-emerald' : 'text-red');
+    document.getElementById('y13-cf-kk').textContent = '~' + fmt(yVelaton.kassavirta / 12) + ' €/kk';
+    document.getElementById('y13-vuokra').textContent = '+' + fmt(yVelaton.vuokraTulot) + ' €';
+    document.getElementById('y13-kulut').textContent = '−' + fmt(yVelaton.kuluTulot) + ' €';
+    document.getElementById('y13-korot').textContent = '−' + fmt(yVelaton.korot) + ' €';
+    document.getElementById('y13-lyhennys').textContent = '−' + fmt(yVelaton.lyhennys) + ' €';
+    document.getElementById('y13-laina').textContent = fmt(yVelaton.lainasaldo) + ' €';
+    document.getElementById('y13-arvo').textContent = fmt(yVelaton.taloArvo) + ' €';
+    document.getElementById('y13-oma').textContent = fmt(yVelaton.oma) + ' €';
     const kumCfEl = document.getElementById('y13-kumcf');
-    kumCfEl.textContent = (y13.kumKassavirta >= 0 ? '+' : '') + fmt(y13.kumKassavirta) + ' €';
-    kumCfEl.className = 'tabular ' + (y13.kumKassavirta >= 0 ? 'text-emerald' : 'text-red');
-    const kasvu = ((y13.oma / omaPaaoma - 1) * 100).toFixed(0);
-    const cagr = ((Math.pow(y13.oma / omaPaaoma, 1/13) - 1) * 100).toFixed(1);
+    kumCfEl.textContent = (yVelaton.kumKassavirta >= 0 ? '+' : '') + fmt(yVelaton.kumKassavirta) + ' €';
+    kumCfEl.className = 'tabular ' + (yVelaton.kumKassavirta >= 0 ? 'text-emerald' : 'text-red');
+    document.getElementById('y13-kumcf-label').textContent = `Kumulatiivinen kassavirta vuoteen ${velattomVuosiNum}`;
+    const kasvu = ((yVelaton.oma / omaPaaoma - 1) * 100).toFixed(0);
+    const cagr = ((Math.pow(yVelaton.oma / omaPaaoma, 1 / velattomVuosiNum) - 1) * 100).toFixed(1);
     document.getElementById('y13-info').innerHTML =
-      `Vuoden 13 alusta laina on maksettu pois. Vuokratulot miinus pienet kulut tuottavat <strong style="color:var(--emerald-700);">${fmt(y13.kassavirta / 12)} €/kk</strong> puhdasta kassavirtaa. Varallisuus on kasvanut ${fmtEur(omaPaaoma)} → <strong>${fmt(y13.oma)} €</strong> eli ${kasvu}&nbsp;% 13 vuodessa, mikä vastaa noin ${cagr}&nbsp;% vuosituottoa omalle pääomalle.`;
+      `Vuoden ${velattomVuosiNum} alusta laina on maksettu pois. Vuokratulot miinus pienet kulut tuottavat <strong style="color:var(--emerald-700);">${fmt(yVelaton.kassavirta / 12)} €/kk</strong> puhdasta kassavirtaa. Varallisuus on kasvanut ${fmtEur(omaPaaoma)} → <strong>${fmt(yVelaton.oma)} €</strong> eli ${kasvu}&nbsp;% ${velattomVuosiNum} vuodessa, mikä vastaa noin ${cagr}&nbsp;% vuosituottoa omalle pääomalle.`;
+  } else {
+    year13Card.style.display = 'none';
   }
 
   // Taulukko ja kortit vuodet 10-15
