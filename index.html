@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fi">
 <head>
 <meta charset="UTF-8">
@@ -40,412 +41,428 @@
     --blue-700: #1d4ed8;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Libre Franklin', system-ui, -apple-system, sans-serif;
-    background: var(--stone-50);
-    color: var(--stone-900);
-    min-height: 100vh;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
+  font-family: 'Libre Franklin', system-ui, -apple-system, sans-serif;
+  background: var(--stone-50);
+  color: var(--stone-900);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
   }
   .serif { font-family: 'Playfair Display', Georgia, serif; }
   .tabular { font-variant-numeric: tabular-nums; }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
-  @media (min-width: 768px) { .container { padding: 32px; } }
+.container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+@media (min-width: 768px) { .container { padding: 32px; } }
 
-  header {
-    border-bottom: 1px solid var(--stone-300);
-    padding-bottom: 16px;
-    margin-bottom: 16px;
-  }
-  @media (min-width: 768px) {
-    header { padding-bottom: 24px; margin-bottom: 32px; }
-  }
-  .eyebrow {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--amber-800);
-    margin-bottom: 4px;
-  }
-  h1 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-  @media (min-width: 768px) {
-    h1 { font-size: 48px; }
-    .eyebrow { font-size: 12px; }
-  }
+header {
+border-bottom: 1px solid var(--stone-300);
+padding-bottom: 16px;
+margin-bottom: 16px;
+}
+@media (min-width: 768px) {
+header { padding-bottom: 24px; margin-bottom: 32px; }
+}
+.eyebrow {
+font-size: 10px;
+text-transform: uppercase;
+letter-spacing: 0.2em;
+color: var(--amber-800);
+margin-bottom: 4px;
+}
+h1 {
+font-family: 'Playfair Display', Georgia, serif;
+font-size: 24px;
+font-weight: 700;
+letter-spacing: -0.02em;
+line-height: 1.1;
+}
+@media (min-width: 768px) {
+h1 { font-size: 48px; }
+.eyebrow { font-size: 12px; }
+}
 
-  .card {
-    background: white;
-    border: 1px solid var(--stone-200);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    margin-bottom: 16px;
-  }
-  @media (min-width: 768px) {
-    .card { padding: 24px; margin-bottom: 24px; }
-  }
+.card {
+background: white;
+border: 1px solid var(--stone-200);
+border-radius: 12px;
+padding: 16px;
+box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+margin-bottom: 16px;
+}
+@media (min-width: 768px) {
+.card { padding: 24px; margin-bottom: 24px; }
+}
 
-  .card-dark {
-    background: var(--stone-900);
-    color: var(--stone-50);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom: 16px;
-  }
-  @media (min-width: 768px) {
-    .card-dark { padding: 24px; margin-bottom: 24px; }
-  }
+.card-dark {
+background: var(--stone-900);
+color: var(--stone-50);
+border-radius: 12px;
+padding: 20px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+margin-bottom: 16px;
+}
+@media (min-width: 768px) {
+.card-dark { padding: 24px; margin-bottom: 24px; }
+}
 
-  .card-emerald {
-    background: linear-gradient(135deg, var(--emerald-700), var(--emerald-900));
-    color: var(--stone-50);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom: 16px;
-  }
-  @media (min-width: 768px) {
-    .card-emerald { padding: 24px; margin-bottom: 24px; }
-  }
+.card-emerald {
+background: linear-gradient(135deg, var(--emerald-700), var(--emerald-900));
+color: var(--stone-50);
+border-radius: 12px;
+padding: 20px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+margin-bottom: 16px;
+}
+@media (min-width: 768px) {
+.card-emerald { padding: 24px; margin-bottom: 24px; }
+}
 
-  .card-amber {
-    background: white;
-    border: 2px solid var(--amber-300);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 16px;
-  }
-  @media (min-width: 768px) {
-    .card-amber { padding: 24px; margin-bottom: 24px; }
-  }
+.card-amber {
+background: white;
+border: 2px solid var(--amber-300);
+border-radius: 12px;
+padding: 20px;
+margin-bottom: 16px;
+}
+@media (min-width: 768px) {
+.card-amber { padding: 24px; margin-bottom: 24px; }
+}
 
-  .label-sm {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-weight: 600;
-    color: var(--stone-500);
-    margin-bottom: 12px;
-  }
-  @media (min-width: 768px) { .label-sm { font-size: 12px; } }
+.label-sm {
+font-size: 10px;
+text-transform: uppercase;
+letter-spacing: 0.15em;
+font-weight: 600;
+color: var(--stone-500);
+margin-bottom: 12px;
+}
+@media (min-width: 768px) { .label-sm { font-size: 12px; } }
 
-  .label-amber { color: var(--amber-400); letter-spacing: 0.2em; }
-  .label-emerald { color: var(--emerald-200); }
+.label-amber { color: var(--amber-400); letter-spacing: 0.2em; }
+.label-emerald { color: var(--emerald-200); }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  @media (min-width: 768px) {
-    .grid-2, .grid-3 { gap: 16px; }
-  }
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+@media (min-width: 768px) {
+.grid-2, .grid-3 { gap: 16px; }
+}
 
-  .main-grid { display: block; }
-  @media (min-width: 768px) {
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 24px;
-      align-items: start;
-    }
-  }
+.main-grid { display: block; }
+@media (min-width: 768px) {
+.main-grid {
+display: grid;
+grid-template-columns: 1fr 2fr;
+gap: 24px;
+align-items: start;
+}
+}
 
-  .hero-num {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 26px;
-    font-weight: 700;
-    line-height: 1.1;
-    font-variant-numeric: tabular-nums;
-  }
-  @media (min-width: 768px) { .hero-num { font-size: 36px; } }
+/* Hero numerot */
+.hero-num {
+font-family: 'Playfair Display', Georgia, serif;
+font-size: 26px;
+font-weight: 700;
+line-height: 1.1;
+font-variant-numeric: tabular-nums;
+}
+@media (min-width: 768px) { .hero-num { font-size: 36px; } }
 
-  .hero-label {
-    font-size: 10px;
-    color: var(--stone-400);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 4px;
-  }
-  @media (min-width: 768px) { .hero-label { font-size: 12px; } }
+.hero-label {
+font-size: 10px;
+color: var(--stone-400);
+text-transform: uppercase;
+letter-spacing: 0.08em;
+margin-bottom: 4px;
+}
+@media (min-width: 768px) { .hero-label { font-size: 12px; } }
 
-  .footer-line {
-    font-size: 10px;
-    color: var(--stone-500);
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--stone-700);
-    line-height: 1.5;
-  }
-  @media (min-width: 768px) { .footer-line { font-size: 12px; } }
-  .footer-line strong { color: var(--stone-300); font-weight: 600; }
+.footer-line {
+font-size: 10px;
+color: var(--stone-500);
+margin-top: 12px;
+padding-top: 12px;
+border-top: 1px solid var(--stone-700);
+line-height: 1.5;
+}
+@media (min-width: 768px) { .footer-line { font-size: 12px; } }
+.footer-line strong { color: var(--stone-300); font-weight: 600; }
 
-  .slider-row { margin-bottom: 12px; }
-  .slider-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 4px;
-    gap: 8px;
-  }
-  .slider-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--stone-700);
-  }
-  .slider-value {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--stone-900);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-  .slider-wrap {
-    padding: 8px 0;
-    touch-action: pan-y;
-  }
-  input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 8px;
-    background: var(--stone-200);
-    border-radius: 9999px;
-    outline: none;
-    margin: 0;
-  }
-  input[type="range"]::-webkit-slider-runnable-track {
-    height: 8px;
-    background: transparent;
-    border-radius: 9999px;
-  }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--amber-700);
-    cursor: grab;
-    border: 3px solid white;
-    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.4);
-    margin-top: -10px;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-  }
-  input[type="range"]::-webkit-slider-thumb:active {
-    cursor: grabbing;
-    transform: scale(1.15);
-    box-shadow: 0 4px 12px rgba(180, 83, 9, 0.5);
-  }
-  input[type="range"]::-moz-range-track {
-    height: 8px;
-    background: var(--stone-200);
-    border-radius: 9999px;
-  }
-  input[type="range"]::-moz-range-thumb {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--amber-700);
-    cursor: grab;
-    border: 3px solid white;
-    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.4);
-  }
+/* Sliderit */
+.slider-row {
+margin-bottom: 12px;
+}
+.slider-head {
+display: flex;
+justify-content: space-between;
+align-items: baseline;
+margin-bottom: 4px;
+gap: 8px;
+}
+.slider-label {
+font-size: 13px;
+font-weight: 500;
+color: var(--stone-700);
+}
+.slider-value {
+font-size: 14px;
+font-weight: 600;
+color: var(--stone-900);
+font-variant-numeric: tabular-nums;
+white-space: nowrap;
+}
+.slider-wrap {
+padding: 8px 0;
+touch-action: pan-y;
+}
+input[type="range"] {
+-webkit-appearance: none;
+appearance: none;
+width: 100%;
+height: 8px;
+background: var(--stone-200);
+border-radius: 9999px;
+outline: none;
+margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+height: 8px;
+background: transparent;
+border-radius: 9999px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+appearance: none;
+width: 28px;
+height: 28px;
+border-radius: 50%;
+background: var(--amber-700);
+cursor: grab;
+border: 3px solid white;
+box-shadow: 0 2px 8px rgba(180, 83, 9, 0.4);
+margin-top: -10px;
+transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+input[type="range"]::-webkit-slider-thumb:active {
+cursor: grabbing;
+transform: scale(1.15);
+box-shadow: 0 4px 12px rgba(180, 83, 9, 0.5);
+}
+input[type="range"]::-moz-range-track {
+height: 8px;
+background: var(--stone-200);
+border-radius: 9999px;
+}
+input[type="range"]::-moz-range-thumb {
+width: 28px;
+height: 28px;
+border-radius: 50%;
+background: var(--amber-700);
+cursor: grab;
+border: 3px solid white;
+box-shadow: 0 2px 8px rgba(180, 83, 9, 0.4);
+}
 
-  .divider {
-    border-top: 1px solid var(--stone-200);
-    padding-top: 16px;
-    margin-top: 16px;
-  }
+.divider {
+border-top: 1px solid var(--stone-200);
+padding-top: 16px;
+margin-top: 16px;
+}
 
-  .breakdown-item { margin-bottom: 14px; }
-  .breakdown-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 4px;
-    gap: 8px;
-  }
-  .breakdown-title { font-size: 13px; font-weight: 600; color: var(--stone-800); }
-  .breakdown-desc { font-size: 11px; color: var(--stone-500); }
-  .breakdown-value {
-    font-size: 15px;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-  .bar-bg {
-    width: 100%;
-    height: 8px;
-    background: var(--stone-100);
-    border-radius: 9999px;
-    overflow: hidden;
-  }
-  .bar-fill {
-    height: 100%;
-    border-radius: 9999px;
-    transition: width 0.3s ease;
-  }
-  .bar-emerald { background: var(--emerald-500); }
-  .bar-amber { background: var(--amber-400); }
-  .bar-red { background: var(--red-500); }
-  .bar-blue { background: var(--blue-500); }
-  .text-emerald { color: var(--emerald-700); }
-  .text-amber { color: var(--amber-700); }
-  .text-red { color: var(--red-700); }
-  .text-blue { color: var(--blue-700); }
+/* Erittely */
+.breakdown-item {
+margin-bottom: 14px;
+}
+.breakdown-head {
+display: flex;
+justify-content: space-between;
+align-items: baseline;
+margin-bottom: 4px;
+gap: 8px;
+}
+.breakdown-title { font-size: 13px; font-weight: 600; color: var(--stone-800); }
+.breakdown-desc { font-size: 11px; color: var(--stone-500); }
+.breakdown-value {
+font-size: 15px;
+font-weight: 700;
+font-variant-numeric: tabular-nums;
+white-space: nowrap;
+}
+.bar-bg {
+width: 100%;
+height: 8px;
+background: var(--stone-100);
+border-radius: 9999px;
+overflow: hidden;
+}
+.bar-fill {
+height: 100%;
+border-radius: 9999px;
+transition: width 0.3s ease;
+}
+.bar-emerald { background: var(--emerald-500); }
+.bar-amber { background: var(--amber-400); }
+.bar-red { background: var(--red-500); }
+.bar-blue { background: var(--blue-500); }
+.text-emerald { color: var(--emerald-700); }
+.text-amber { color: var(--amber-700); }
+.text-red { color: var(--red-700); }
+.text-blue { color: var(--blue-700); }
 
-  .total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    border-top: 2px solid var(--stone-200);
-    margin-top: 20px;
-    padding-top: 16px;
-  }
-  .total-num {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 22px;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-  }
-  @media (min-width: 768px) { .total-num { font-size: 28px; } }
+.total-row {
+display: flex;
+justify-content: space-between;
+align-items: baseline;
+border-top: 2px solid var(--stone-200);
+margin-top: 20px;
+padding-top: 16px;
+}
+.total-num {
+font-family: 'Playfair Display', Georgia, serif;
+font-size: 22px;
+font-weight: 700;
+font-variant-numeric: tabular-nums;
+}
+@media (min-width: 768px) { .total-num { font-size: 28px; } }
 
-  .info-box {
-    background: var(--stone-50);
-    border: 1px solid var(--stone-200);
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 11px;
-    color: var(--stone-600);
-    line-height: 1.6;
-    margin-top: 16px;
-  }
-  @media (min-width: 768px) { .info-box { font-size: 12px; } }
-  .info-box strong { color: var(--stone-800); }
+.info-box {
+background: var(--stone-50);
+border: 1px solid var(--stone-200);
+border-radius: 8px;
+padding: 12px;
+font-size: 11px;
+color: var(--stone-600);
+line-height: 1.6;
+margin-top: 16px;
+}
+@media (min-width: 768px) { .info-box { font-size: 12px; } }
+.info-box strong { color: var(--stone-800); }
 
-  .info-box-dark {
-    background: rgba(2, 44, 34, 0.4);
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 11px;
-    color: var(--emerald-100);
-    line-height: 1.6;
-    margin-top: 16px;
-  }
-  @media (min-width: 768px) { .info-box-dark { font-size: 12px; } }
-  .info-box-dark strong { color: var(--amber-200); }
+.info-box-dark {
+background: rgba(2, 44, 34, 0.4);
+border-radius: 8px;
+padding: 12px;
+font-size: 11px;
+color: var(--emerald-100);
+line-height: 1.6;
+margin-top: 16px;
+}
+@media (min-width: 768px) { .info-box-dark { font-size: 12px; } }
+.info-box-dark strong { color: var(--amber-200); }
 
-  .info-box-amber {
-    background: var(--amber-50);
-    border: 1px solid var(--amber-200);
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 11px;
-    color: var(--stone-700);
-    line-height: 1.6;
-    margin-top: 16px;
-  }
-  @media (min-width: 768px) { .info-box-amber { font-size: 12px; } }
+.info-box-amber {
+background: var(--amber-50);
+border: 1px solid var(--amber-200);
+border-radius: 8px;
+padding: 12px;
+font-size: 11px;
+color: var(--stone-700);
+line-height: 1.6;
+margin-top: 16px;
+}
+@media (min-width: 768px) { .info-box-amber { font-size: 12px; } }
 
-  .year-card {
-    background: var(--stone-50);
-    border: 1px solid var(--stone-100);
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 8px;
-  }
-  .year-card.sale-year {
-    background: var(--amber-50);
-    border-color: var(--amber-300);
-  }
-  .year-card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .year-card-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 18px;
-    font-weight: 700;
-  }
-  .badge {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: var(--amber-700);
-    color: white;
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
-  .year-card-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px 12px;
-    font-size: 11px;
-    font-variant-numeric: tabular-nums;
-  }
-  .year-card-row { display: flex; justify-content: space-between; }
-  .year-card-row .lbl { color: var(--stone-500); }
-  .year-card-row .val { color: var(--stone-800); font-weight: 500; }
-  .year-card-total {
-    grid-column: span 2;
-    padding-top: 4px;
-    margin-top: 4px;
-    border-top: 1px solid var(--stone-200);
-    display: flex;
-    justify-content: space-between;
-  }
-  .year-card-total .lbl { color: var(--stone-500); }
-  .year-card-total .val { color: var(--stone-900); font-weight: 600; }
+/* Cards mobiili */
+.year-card {
+background: var(--stone-50);
+border: 1px solid var(--stone-100);
+border-radius: 8px;
+padding: 12px;
+margin-bottom: 8px;
+}
+.year-card.sale-year {
+background: var(--amber-50);
+border-color: var(--amber-300);
+}
+.year-card-head {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 8px;
+}
+.year-card-title {
+font-family: 'Playfair Display', Georgia, serif;
+font-size: 18px;
+font-weight: 700;
+}
+.badge {
+font-size: 9px;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+background: var(--amber-700);
+color: white;
+padding: 2px 6px;
+border-radius: 4px;
+}
+.year-card-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 4px 12px;
+font-size: 11px;
+font-variant-numeric: tabular-nums;
+}
+.year-card-row {
+display: flex;
+justify-content: space-between;
+}
+.year-card-row .lbl { color: var(--stone-500); }
+.year-card-row .val { color: var(--stone-800); font-weight: 500; }
+.year-card-total {
+grid-column: span 2;
+padding-top: 4px;
+margin-top: 4px;
+border-top: 1px solid var(--stone-200);
+display: flex;
+justify-content: space-between;
+}
+.year-card-total .lbl { color: var(--stone-500); }
+.year-card-total .val { color: var(--stone-900); font-weight: 600; }
 
-  .table-wrap { overflow-x: auto; display: none; }
-  @media (min-width: 768px) { .table-wrap { display: block; } }
-  .year-cards { display: block; }
-  @media (min-width: 768px) { .year-cards { display: none; } }
+/* Taulukko */
+.table-wrap { overflow-x: auto; display: none; }
+@media (min-width: 768px) { .table-wrap { display: block; } }
+.year-cards { display: block; }
+@media (min-width: 768px) { .year-cards { display: none; } }
 
-  table { width: 100%; font-size: 14px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-  th { text-align: left; padding: 8px; font-weight: 500; color: var(--stone-600); border-bottom: 2px solid var(--stone-300); }
-  th.right, td.right { text-align: right; }
-  td { padding: 8px; border-bottom: 1px solid var(--stone-100); color: var(--stone-700); }
-  td.bold { font-weight: 600; color: var(--stone-900); }
-  tr.sale-row { background: var(--amber-50); }
+table { width: 100%; font-size: 14px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th { text-align: left; padding: 8px; font-weight: 500; color: var(--stone-600); border-bottom: 2px solid var(--stone-300); }
+th.right, td.right { text-align: right; }
+td { padding: 8px; border-bottom: 1px solid var(--stone-100); color: var(--stone-700); }
+td.bold { font-weight: 600; color: var(--stone-900); }
+tr.sale-row { background: var(--amber-50); }
 
-  .summary-card {
-    background: var(--amber-50);
-    border: 1px solid var(--amber-200);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
-  }
-  @media (min-width: 768px) { .summary-card { padding: 24px; } }
-  .summary-card p { font-size: 13px; color: var(--stone-800); line-height: 1.6; margin-bottom: 8px; }
-  @media (min-width: 768px) { .summary-card p { font-size: 14px; } }
-  .summary-card p:last-child { margin-bottom: 0; }
+/* Yhteenveto */
+.summary-card {
+background: var(--amber-50);
+border: 1px solid var(--amber-200);
+border-radius: 12px;
+padding: 16px;
+margin-bottom: 16px;
+}
+@media (min-width: 768px) { .summary-card { padding: 24px; } }
+.summary-card p { font-size: 13px; color: var(--stone-800); line-height: 1.6; margin-bottom: 8px; }
+@media (min-width: 768px) { .summary-card p { font-size: 14px; } }
+.summary-card p:last-child { margin-bottom: 0; }
 
-  .disclaimer {
-    font-size: 10px;
-    color: var(--stone-400);
-    text-align: center;
-    margin-top: 16px;
-    padding: 0 8px;
-    line-height: 1.6;
-  }
-  @media (min-width: 768px) { .disclaimer { font-size: 12px; margin-top: 24px; } }
+.disclaimer {
+font-size: 10px;
+color: var(--stone-400);
+text-align: center;
+margin-top: 16px;
+padding: 0 8px;
+line-height: 1.6;
+}
+@media (min-width: 768px) { .disclaimer { font-size: 12px; margin-top: 24px; } }
 
-  .pos { color: var(--emerald-700); }
-  .neg { color: var(--red-700); }
-  .pos-light { color: var(--emerald-100); }
-  .neg-light { color: var(--red-300); }
+/* Apuvärit */
+.pos { color: var(--emerald-700); }
+.neg { color: var(--red-700); }
+.pos-light { color: var(--emerald-100); }
+.neg-light { color: var(--red-300); }
 </style>
+
 </head>
 <body>
 
@@ -454,6 +471,8 @@
     <div class="eyebrow">Asuntosijoitus · Skenaario</div>
     <h1>Sijoituslaskuri</h1>
   </header>
+
+  <!-- Lopputuotto -->
 
   <div class="card-dark">
     <div class="label-sm label-amber">Lopputuotto vuonna <span id="hero-myyntiVuosi">15</span></div>
@@ -485,6 +504,8 @@
       Kuukausierä: <strong id="hero-era">—</strong> · Kokonaistuotto omalle pääomalle: <strong id="hero-total">—</strong>
     </div>
   </div>
+
+  <!-- Erittely -->
 
   <div class="card">
     <div class="label-sm" style="margin-bottom: 4px;">Mistä tuotto muodostuu</div>
@@ -534,6 +555,8 @@
     <div class="info-box" id="er-info">—</div>
   </div>
 
+  <!-- Lainan loppuminen -->
+
   <div class="card-emerald" id="loan-end-card">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom: 16px;">
       <div>
@@ -561,6 +584,8 @@
     </div>
     <div class="info-box-dark" id="loan-end-info">—</div>
   </div>
+
+  <!-- Vuosi 13 -->
 
   <div class="card-amber" id="year13-card">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom: 16px;">
@@ -607,6 +632,7 @@
   </div>
 
   <div class="main-grid">
+    <!-- Parametrit -->
     <div class="card" style="height:fit-content;">
       <div class="label-sm">Parametrit</div>
       <div id="sliders"></div>
@@ -616,6 +642,7 @@
       </div>
     </div>
 
+    <!-- Taulukko + Yhteenveto -->
     <div>
       <div class="card">
         <div class="label-sm">Tilanne vuosina 10–15</div>
@@ -651,6 +678,7 @@
 </div>
 
 <script>
+// State
 const state = {
   hinta: 135000,
   vuokra: 850,
@@ -666,25 +694,31 @@ const state = {
 };
 
 const sliderDefs = [
-  { key: 'hinta',         label: 'Talon hinta',       min: 50000,  max: 300000, step: 500,  unit: '€' },
-  { key: 'vuokra',        label: 'Vuokra / kk',        min: 400,    max: 1500,   step: 5,    unit: '€' },
-  { key: 'kulut',         label: 'Kulut / kk',         min: 0,      max: 500,    step: 5,    unit: '€' },
-  { key: 'omaPaaoma',     label: 'Oma pääoma',         min: 5000,   max: 150000, step: 500,  unit: '€' },
-  { key: 'velka',         label: 'Velka',              min: 0,      max: 250000, step: 500,  unit: '€' },
-  { key: 'korko',         label: 'Korko',              min: 0,      max: 8,      step: 0.05, unit: '%' },
-  { key: 'lainaAika',     label: 'Laina-aika',         min: 5,      max: 30,     step: 1,    unit: 'v' },
-  { key: 'arvonnousu',    label: 'Arvonnousu / v',     min: -2,     max: 5,      step: 0.05, unit: '%' },
-  { key: 'vuokrankorotus',label: 'Vuokrankorotus / v', min: 0,      max: 5,      step: 0.05, unit: '%' },
+  { key: 'hinta', label: 'Talon hinta', min: 50000, max: 300000, step: 500, unit: '€' },
+  { key: 'vuokra', label: 'Vuokra / kk', min: 400, max: 1500, step: 5, unit: '€' },
+  { key: 'kulut', label: 'Kulut / kk', min: 0, max: 500, step: 5, unit: '€' },
+  { key: 'omaPaaoma', label: 'Oma pääoma', min: 5000, max: 150000, step: 500, unit: '€' },
+  { key: 'velka', label: 'Velka', min: 0, max: 250000, step: 500, unit: '€' },
+  { key: 'korko', label: 'Korko', min: 0, max: 8, step: 0.05, unit: '%' },
+  { key: 'lainaAika', label: 'Laina-aika', min: 5, max: 30, step: 1, unit: 'v' },
+  { key: 'arvonnousu', label: 'Arvonnousu / v', min: -2, max: 5, step: 0.05, unit: '%' },
+  { key: 'vuokrankorotus', label: 'Vuokrankorotus / v', min: 0, max: 5, step: 0.05, unit: '%' },
 ];
 
 const saleSliderDefs = [
-  { key: 'myyntiVuosi',  label: 'Myyntivuosi',  min: 5,     max: 20,     step: 1,   unit: 'v' },
-  { key: 'myyntihinta',  label: 'Myyntihinta',  min: 50000, max: 400000, step: 500, unit: '€' },
+  { key: 'myyntiVuosi', label: 'Myyntivuosi', min: 5, max: 20, step: 1, unit: 'v' },
+  { key: 'myyntihinta', label: 'Myyntihinta', min: 50000, max: 400000, step: 500, unit: '€' },
 ];
 
-function fmt(n) { return Math.round(n).toLocaleString('fi-FI'); }
-function fmtEur(n) { return fmt(n) + ' €'; }
-function fmtSigned(n) { return (n >= 0 ? '+' : '') + fmt(n) + ' €'; }
+function fmt(n) {
+  return Math.round(n).toLocaleString('fi-FI');
+}
+function fmtEur(n) {
+  return fmt(n) + ' €';
+}
+function fmtSigned(n) {
+  return (n >= 0 ? '+' : '') + fmt(n) + ' €';
+}
 
 function buildSlider(def) {
   const row = document.createElement('div');
@@ -696,7 +730,8 @@ function buildSlider(def) {
     </div>
     <div class="slider-wrap">
       <input type="range" id="sl-${def.key}" min="${def.min}" max="${def.max}" step="${def.step}" value="${state[def.key]}">
-    </div>`;
+    </div>
+  `;
   return row;
 }
 
@@ -705,8 +740,10 @@ function renderSliders() {
   const sale = document.getElementById('sale-sliders');
   sliderDefs.forEach(d => wrap.appendChild(buildSlider(d)));
   saleSliderDefs.forEach(d => sale.appendChild(buildSlider(d)));
+
   [...sliderDefs, ...saleSliderDefs].forEach(d => {
-    document.getElementById('sl-' + d.key).addEventListener('input', e => {
+    const input = document.getElementById('sl-' + d.key);
+    input.addEventListener('input', (e) => {
       state[d.key] = parseFloat(e.target.value);
       compute();
     });
@@ -718,9 +755,9 @@ function compute() {
 
   const kkKorko = korko / 100 / 12;
   const lainaKk = lainaAika * 12;
-  const kuukausiera = kkKorko === 0
-    ? velka / lainaKk
-    : (velka * kkKorko) / (1 - Math.pow(1 + kkKorko, -lainaKk));
+  let kuukausiera;
+  if (kkKorko === 0) kuukausiera = velka / lainaKk;
+  else kuukausiera = (velka * kkKorko) / (1 - Math.pow(1 + kkKorko, -lainaKk));
 
   const vuodet = [];
   let lainasaldo = velka;
@@ -733,45 +770,63 @@ function compute() {
       if (lainasaldo > 0) {
         const k = lainasaldo * kkKorko;
         const l = Math.min(kuukausiera - k, lainasaldo);
-        vKorot += k; vLyhennys += l; lainasaldo -= l;
+        vKorot += k;
+        vLyhennys += l;
+        lainasaldo -= l;
         if (lainasaldo < 0) lainasaldo = 0;
       }
     }
     const vuokraT = vuokra * 12 * Math.pow(1 + vuokrankorotus / 100, v - 1);
-    const kuluT   = kulut  * 12 * Math.pow(1 + vuokrankorotus / 100, v - 1);
+    const kuluT = kulut * 12 * Math.pow(1 + vuokrankorotus / 100, v - 1);
     const cf = vuokraT - kuluT - vKorot - vLyhennys;
-    kumCF += cf; kumLyhennys += vLyhennys;
+    kumCF += cf;
+    kumLyhennys += vLyhennys;
     const taloArvo = hinta * Math.pow(1 + arvonnousu / 100, v);
-    vuodet.push({ vuosi: v, vuokraTulot: vuokraT, kuluTulot: kuluT, korot: vKorot,
-      lyhennys: vLyhennys, kassavirta: cf, kumKassavirta: kumCF, kumLyhennys,
-      lainasaldo, taloArvo, oma: taloArvo - lainasaldo });
+    vuodet.push({
+      vuosi: v,
+      vuokraTulot: vuokraT,
+      kuluTulot: kuluT,
+      korot: vKorot,
+      lyhennys: vLyhennys,
+      kassavirta: cf,
+      kumKassavirta: kumCF,
+      kumLyhennys: kumLyhennys,
+      lainasaldo: lainasaldo,
+      taloArvo: taloArvo,
+      oma: taloArvo - lainasaldo,
+    });
   }
 
   const myynti = vuodet[myyntiVuosi - 1];
-  const myyntiTuotto  = myyntihinta - myynti.lainasaldo;
+  const myyntiTuotto = myyntihinta - myynti.lainasaldo;
   const kokonaisVoitto = myyntiTuotto + myynti.kumKassavirta - omaPaaoma;
-  const totalReturn    = (kokonaisVoitto / omaPaaoma) * 100;
-  const vuosituotto    = (Math.pow(Math.max(0.01, 1 + kokonaisVoitto / omaPaaoma), 1 / myyntiVuosi) - 1) * 100;
-  const lyhennysOsuus  = myynti.kumLyhennys;
-  const arvonmuutos    = myyntihinta - hinta;
+  const totalReturn = (kokonaisVoitto / omaPaaoma) * 100;
+  const vuosituotto = (Math.pow(Math.max(0.01, 1 + kokonaisVoitto / omaPaaoma), 1 / myyntiVuosi) - 1) * 100;
+
+  // Erittely
+  const lyhennysOsuus = myynti.kumLyhennys;
+  const arvonmuutos = myyntihinta - hinta;
   const kassavirtaOsuus = myynti.kumKassavirta;
 
+  // Päivitä slider-arvot
   [...sliderDefs, ...saleSliderDefs].forEach(d => {
     const el = document.getElementById('val-' + d.key);
     if (el) el.textContent = state[d.key].toLocaleString('fi-FI') + ' ' + d.unit;
   });
 
+  // Hero
   document.getElementById('hero-myyntiVuosi').textContent = myyntiVuosi;
-  document.getElementById('hero-voitto').textContent      = fmtEur(kokonaisVoitto);
+  document.getElementById('hero-voitto').textContent = fmtEur(kokonaisVoitto);
   document.getElementById('hero-vuosituotto').textContent = vuosituotto.toFixed(2) + ' %';
-  document.getElementById('hero-myyntitulo').textContent  = fmtEur(myyntihinta);
-  document.getElementById('hero-laina').textContent       = fmtEur(myynti.lainasaldo);
+  document.getElementById('hero-myyntitulo').textContent = fmtEur(myyntihinta);
+  document.getElementById('hero-laina').textContent = fmtEur(myynti.lainasaldo);
   const heroCf = document.getElementById('hero-kassavirta');
   heroCf.textContent = fmtEur(myynti.kumKassavirta);
   heroCf.className = 'tabular' + (myynti.kumKassavirta < 0 ? ' neg-light' : '');
-  document.getElementById('hero-era').textContent   = fmtEur(kuukausiera);
+  document.getElementById('hero-era').textContent = fmtEur(kuukausiera);
   document.getElementById('hero-total').textContent = totalReturn.toFixed(1) + ' %';
 
+  // Erittely
   document.getElementById('erittely-intro').textContent =
     `${myyntiVuosi} vuoden aikana omasta ${fmtEur(omaPaaoma)} pääomasta tulee ${fmtEur(omaPaaoma + kokonaisVoitto)}`;
 
@@ -796,67 +851,69 @@ function compute() {
   const erTotal = document.getElementById('er-total');
   erTotal.textContent = fmtSigned(kokonaisVoitto);
   erTotal.className = 'total-num ' + (kokonaisVoitto >= 0 ? 'text-emerald' : 'text-red');
-  document.getElementById('er-total-desc').textContent =
-    `= varallisuuden kasvu ${fmtEur(omaPaaoma)} omasta pääomasta`;
+  document.getElementById('er-total-desc').textContent = `= varallisuuden kasvu ${fmtEur(omaPaaoma)} omasta pääomasta`;
   document.getElementById('er-info').innerHTML =
     `<strong>Vipuvaikutus:</strong> Lyhennysosuus ${fmtEur(lyhennysOsuus)} on isompi kuin oma pääoma ${fmtEur(omaPaaoma)} — vuokralaiset maksavat sinulle ${((lyhennysOsuus / omaPaaoma) * 100).toFixed(0)} % alkupääomasta takaisin pelkän lainan lyhennyksen kautta. Tämä on velkavivun ydin.`;
 
-  const lainaLoppuuIdx   = vuodet.findIndex(v => v.lainasaldo === 0);
+  // Lainan loppuminen
+  const lainaLoppuuIdx = vuodet.findIndex(v => v.lainasaldo === 0);
   const lainaLoppuuVuosi = lainaLoppuuIdx + 1;
   const loanCard = document.getElementById('loan-end-card');
   if (lainaLoppuuIdx >= 0 && lainaLoppuuIdx < 19) {
     loanCard.style.display = 'block';
     document.getElementById('loan-end-year').textContent = 'Vuosi ' + lainaLoppuuVuosi;
-    document.getElementById('loan-end-sub').textContent  =
-      `Vuosi ${lainaLoppuuVuosi + 1} on ensimmäinen täysin velaton vuosi`;
-    const ennen   = lainaLoppuuIdx > 0 ? vuodet[lainaLoppuuIdx - 1] : null;
+    document.getElementById('loan-end-sub').textContent = `Vuosi ${lainaLoppuuVuosi + 1} on ensimmäinen täysin velaton vuosi`;
+    const ennen = lainaLoppuuIdx > 0 ? vuodet[lainaLoppuuIdx - 1] : null;
     const jalkeen = vuodet[lainaLoppuuIdx + 1] || null;
     if (ennen && jalkeen) {
       const hyppy = jalkeen.kassavirta - ennen.kassavirta;
-      document.getElementById('loan-jump').textContent      = '+' + fmt(hyppy) + ' €';
-      document.getElementById('loan-before').textContent    = (ennen.kassavirta >= 0 ? '+' : '') + fmt(ennen.kassavirta) + ' €';
+      document.getElementById('loan-jump').textContent = '+' + fmt(hyppy) + ' €';
+      document.getElementById('loan-before').textContent = (ennen.kassavirta >= 0 ? '+' : '') + fmt(ennen.kassavirta) + ' €';
       document.getElementById('loan-before-kk').textContent = '~' + fmt(ennen.kassavirta / 12) + ' €/kk · vuosi ' + ennen.vuosi;
-      document.getElementById('loan-after').textContent     = '+' + fmt(jalkeen.kassavirta) + ' €';
-      document.getElementById('loan-after-kk').textContent  = '~' + fmt(jalkeen.kassavirta / 12) + ' €/kk · vuosi ' + jalkeen.vuosi;
+      document.getElementById('loan-after').textContent = '+' + fmt(jalkeen.kassavirta) + ' €';
+      document.getElementById('loan-after-kk').textContent = '~' + fmt(jalkeen.kassavirta / 12) + ' €/kk · vuosi ' + jalkeen.vuosi;
     }
     const velattomatVuodet = Math.max(0, myyntiVuosi - lainaLoppuuVuosi);
-    const velattomatCF     = vuodet.slice(lainaLoppuuVuosi, myyntiVuosi).reduce((s, v) => s + v.kassavirta, 0);
+    const velattomatCF = vuodet.slice(lainaLoppuuVuosi, myyntiVuosi).reduce((s, v) => s + v.kassavirta, 0);
     document.getElementById('loan-end-info').innerHTML =
       `Lainan loppumisen jälkeen vuokratulot (− pienet kulut) ovat käytännössä puhdasta tuottoa. Jos pidät kohteen myyntivuoteen ${myyntiVuosi} asti, viimeiset ${velattomatVuodet} vuotta tuovat yhteensä noin <strong>${fmtEur(velattomatCF)}</strong> kassavirtaa.`;
   } else {
     loanCard.style.display = 'none';
   }
 
+  // Vuosi 13
   const y13 = vuodet[12];
   if (y13) {
     document.getElementById('y13-cf').textContent = (y13.kassavirta >= 0 ? '+' : '') + fmt(y13.kassavirta) + ' €';
-    document.getElementById('y13-cf').className   = 'hero-num ' + (y13.kassavirta >= 0 ? 'text-emerald' : 'text-red');
-    document.getElementById('y13-cf-kk').textContent   = '~' + fmt(y13.kassavirta / 12) + ' €/kk';
-    document.getElementById('y13-vuokra').textContent  = '+' + fmt(y13.vuokraTulot) + ' €';
-    document.getElementById('y13-kulut').textContent   = '−' + fmt(y13.kuluTulot) + ' €';
-    document.getElementById('y13-korot').textContent   = '−' + fmt(y13.korot) + ' €';
-    document.getElementById('y13-lyhennys').textContent= '−' + fmt(y13.lyhennys) + ' €';
-    document.getElementById('y13-laina').textContent   = fmt(y13.lainasaldo) + ' €';
-    document.getElementById('y13-arvo').textContent    = fmt(y13.taloArvo) + ' €';
-    document.getElementById('y13-oma').textContent     = fmt(y13.oma) + ' €';
+    document.getElementById('y13-cf').className = 'hero-num ' + (y13.kassavirta >= 0 ? 'text-emerald' : 'text-red');
+    document.getElementById('y13-cf-kk').textContent = '~' + fmt(y13.kassavirta / 12) + ' €/kk';
+    document.getElementById('y13-vuokra').textContent = '+' + fmt(y13.vuokraTulot) + ' €';
+    document.getElementById('y13-kulut').textContent = '−' + fmt(y13.kuluTulot) + ' €';
+    document.getElementById('y13-korot').textContent = '−' + fmt(y13.korot) + ' €';
+    document.getElementById('y13-lyhennys').textContent = '−' + fmt(y13.lyhennys) + ' €';
+    document.getElementById('y13-laina').textContent = fmt(y13.lainasaldo) + ' €';
+    document.getElementById('y13-arvo').textContent = fmt(y13.taloArvo) + ' €';
+    document.getElementById('y13-oma').textContent = fmt(y13.oma) + ' €';
     const kumCfEl = document.getElementById('y13-kumcf');
     kumCfEl.textContent = (y13.kumKassavirta >= 0 ? '+' : '') + fmt(y13.kumKassavirta) + ' €';
-    kumCfEl.className   = 'tabular ' + (y13.kumKassavirta >= 0 ? 'text-emerald' : 'text-red');
+    kumCfEl.className = 'tabular ' + (y13.kumKassavirta >= 0 ? 'text-emerald' : 'text-red');
     const kasvu = ((y13.oma / omaPaaoma - 1) * 100).toFixed(0);
-    const cagr  = ((Math.pow(y13.oma / omaPaaoma, 1/13) - 1) * 100).toFixed(1);
+    const cagr = ((Math.pow(y13.oma / omaPaaoma, 1/13) - 1) * 100).toFixed(1);
     document.getElementById('y13-info').innerHTML =
       `Vuoden 13 alusta laina on maksettu pois. Vuokratulot miinus pienet kulut tuottavat <strong style="color:var(--emerald-700);">${fmt(y13.kassavirta / 12)} €/kk</strong> puhdasta kassavirtaa. Varallisuus on kasvanut ${fmtEur(omaPaaoma)} → <strong>${fmt(y13.oma)} €</strong> eli ${kasvu}&nbsp;% 13 vuodessa, mikä vastaa noin ${cagr}&nbsp;% vuosituottoa omalle pääomalle.`;
   }
 
+  // Taulukko ja kortit vuodet 10-15
   const tbody = document.getElementById('table-body');
   const cards = document.getElementById('year-cards');
-  tbody.innerHTML = ''; cards.innerHTML = '';
+  tbody.innerHTML = '';
+  cards.innerHTML = '';
   for (let i = 9; i < 15; i++) {
     const v = vuodet[i];
     if (!v) continue;
     const isSale = v.vuosi === myyntiVuosi;
     const cfClass = v.kassavirta >= 0 ? 'pos' : 'neg';
-    const cfSign  = v.kassavirta >= 0 ? '+' : '';
+    const cfSign = v.kassavirta >= 0 ? '+' : '';
 
     const tr = document.createElement('tr');
     if (isSale) tr.className = 'sale-row';
@@ -867,7 +924,8 @@ function compute() {
       <td class="right">${fmt(v.lyhennys)}</td>
       <td class="right ${cfClass}" style="font-weight:500;">${fmt(v.kassavirta)}</td>
       <td class="right">${fmt(v.lainasaldo)}</td>
-      <td class="right bold">${fmt(v.oma)}</td>`;
+      <td class="right bold">${fmt(v.oma)}</td>
+    `;
     tbody.appendChild(tr);
 
     const card = document.createElement('div');
@@ -878,7 +936,7 @@ function compute() {
           <span class="year-card-title">Vuosi ${v.vuosi}</span>
           ${isSale ? '<span class="badge">Myynti</span>' : ''}
         </div>
-        <span class="${cfClass}" style="font-weight:700; font-size:13px;">${cfSign}${fmt(v.kassavirta)} €</span>
+        <span class="${cfClass}" style="font-weight:700; font-size:13px;" class="tabular">${cfSign}${fmt(v.kassavirta)} €</span>
       </div>
       <div class="year-card-grid">
         <div class="year-card-row"><span class="lbl">Vuokra</span><span class="val">${fmt(v.vuokraTulot)}</span></div>
@@ -886,16 +944,20 @@ function compute() {
         <div class="year-card-row"><span class="lbl">Lyhennys</span><span class="val">${fmt(v.lyhennys)}</span></div>
         <div class="year-card-row"><span class="lbl">Laina</span><span class="val">${fmt(v.lainasaldo)}</span></div>
         <div class="year-card-total"><span class="lbl">Oma osuus</span><span class="val">${fmt(v.oma)} €</span></div>
-      </div>`;
+      </div>
+    `;
     cards.appendChild(card);
   }
 
-  const v1cf  = vuodet[0].kassavirta;
+  // Yhteenveto
+  const summary = document.getElementById('summary-text');
+  const v1cf = vuodet[0].kassavirta;
   const v15cf = vuodet[14].kassavirta;
-  document.getElementById('summary-text').innerHTML = `
+  summary.innerHTML = `
     <p>Sijoitat <strong>${fmtEur(omaPaaoma)}</strong> omaa pääomaa <strong>${fmtEur(hinta)}</strong> kohteeseen. Laina <strong>${fmtEur(velka)}</strong> korolla <strong>${korko} %</strong> (${lainaAika}&nbsp;v annuiteetti) tarkoittaa <strong>${fmtEur(kuukausiera)}</strong>/kk hoitoerää.</p>
     <p>Vuoden 1 kassavirta on <strong class="${v1cf >= 0 ? 'pos' : 'neg'}">${fmtEur(v1cf)}</strong>. Laina maksetaan pois vuonna ${lainaLoppuuVuosi > 0 ? lainaLoppuuVuosi : lainaAika}, jonka jälkeen kassavirta nousee selvästi. Vuonna 15 kassavirta on <strong class="${v15cf >= 0 ? 'pos' : 'neg'}">${fmtEur(v15cf)}</strong> ja lainasaldo <strong>${fmtEur(vuodet[14].lainasaldo)}</strong>.</p>
-    <p>Vuokralaiset maksavat lainan pois (${fmtEur(lyhennysOsuus)} lyhennystä ${myyntiVuosi} vuodessa) ja myynti vuonna ${myyntiVuosi} hintaan <strong>${fmtEur(myyntihinta)}</strong> tuo käteen <strong>${fmtEur(myyntiTuotto)}</strong>. Kokonaisvoitto <strong class="${kokonaisVoitto >= 0 ? 'pos' : 'neg'}">${fmtEur(kokonaisVoitto)}</strong> = <strong>${vuosituotto.toFixed(2)} %</strong> vuosituotto omalle pääomalle.</p>`;
+    <p>Vuokralaiset maksavat lainan pois (${fmtEur(lyhennysOsuus)} lyhennystä ${myyntiVuosi} vuodessa) ja myynti vuonna ${myyntiVuosi} hintaan <strong>${fmtEur(myyntihinta)}</strong> tuo käteen <strong>${fmtEur(myyntiTuotto)}</strong>. Kokonaisvoitto <strong class="${kokonaisVoitto >= 0 ? 'pos' : 'neg'}">${fmtEur(kokonaisVoitto)}</strong> = <strong>${vuosituotto.toFixed(2)} %</strong> vuosituotto omalle pääomalle.</p>
+  `;
 }
 
 renderSliders();
