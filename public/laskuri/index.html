@@ -645,7 +645,7 @@ line-height: 1.6;
     <!-- Taulukko + Yhteenveto -->
     <div>
       <div class="card">
-        <div class="label-sm">Tilanne vuosina 10–15</div>
+        <div class="label-sm">Tilanne kaikki vuodet</div>
         <div class="table-wrap">
           <table>
             <thead>
@@ -941,7 +941,7 @@ function compute() {
   const cards = document.getElementById('year-cards');
   tbody.innerHTML = '';
   cards.innerHTML = '';
-  for (let i = 9; i < 15; i++) {
+  for (let i = 0; i < vuodet.length; i++) {
     const v = vuodet[i];
     if (!v) continue;
     const isSale = v.vuosi === myyntiVuosi;
@@ -985,10 +985,10 @@ function compute() {
   // Yhteenveto
   const summary = document.getElementById('summary-text');
   const v1cf = vuodet[0].kassavirta;
-  const v15cf = vuodet[14].kassavirta;
+  const vLastcf = myynti.kassavirta;
   summary.innerHTML = `
     <p>Sijoitat <strong>${fmtEur(omaPaaoma)}</strong> omaa pääomaa <strong>${fmtEur(hinta)}</strong> kohteeseen. Laina <strong>${fmtEur(velka)}</strong> korolla <strong>${korko} %</strong> (${lainaAika}&nbsp;v annuiteetti) tarkoittaa <strong>${fmtEur(kuukausiera)}</strong>/kk hoitoerää.</p>
-    <p>Vuoden 1 kassavirta on <strong class="${v1cf >= 0 ? 'pos' : 'neg'}">${fmtEur(v1cf)}</strong>. Laina maksetaan pois vuonna ${lainaLoppuuVuosi > 0 ? lainaLoppuuVuosi : lainaAika}, jonka jälkeen kassavirta nousee selvästi. Vuonna 15 kassavirta on <strong class="${v15cf >= 0 ? 'pos' : 'neg'}">${fmtEur(v15cf)}</strong> ja lainasaldo <strong>${fmtEur(vuodet[14].lainasaldo)}</strong>.</p>
+    <p>Vuoden 1 kassavirta on <strong class="${v1cf >= 0 ? 'pos' : 'neg'}">${fmtEur(v1cf)}</strong>. Laina maksetaan pois vuonna ${lainaLoppuuIdx >= 0 ? lainaLoppuuVuosi : lainaAika}, jonka jälkeen kassavirta nousee selvästi. Vuonna ${myyntiVuosi} kassavirta on <strong class="${vLastcf >= 0 ? 'pos' : 'neg'}">${fmtEur(vLastcf)}</strong> ja lainasaldo <strong>${fmtEur(myynti.lainasaldo)}</strong>.</p>
     <p>Vuokralaiset maksavat lainan pois (${fmtEur(lyhennysOsuus)} lyhennystä ${myyntiVuosi} vuodessa) ja myynti vuonna ${myyntiVuosi} hintaan <strong>${fmtEur(myyntihinta)}</strong> tuo käteen <strong>${fmtEur(myyntiTuotto)}</strong>. Kokonaisvoitto <strong class="${kokonaisVoitto >= 0 ? 'pos' : 'neg'}">${fmtEur(kokonaisVoitto)}</strong> = <strong>${vuosituotto.toFixed(2)} %</strong> vuosituotto omalle pääomalle.</p>
   `;
 }
