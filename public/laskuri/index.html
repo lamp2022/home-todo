@@ -471,7 +471,7 @@ line-height: 1.6;
     <div class="eyebrow">Asuntosijoitus · Skenaario</div>
     <div style="display:flex; align-items:baseline; gap:12px;">
       <h1>Sijoituslaskuri</h1>
-      <span style="font-size:11px; color:var(--stone-400); font-variant-numeric:tabular-nums;">v1.1</span>
+      <span style="font-size:11px; color:var(--stone-400); font-variant-numeric:tabular-nums;">v1.2</span>
     </div>
   </header>
 
@@ -489,17 +489,15 @@ line-height: 1.6;
         <div class="hero-num" style="color: var(--amber-300);" id="hero-vuosituotto">—</div>
       </div>
     </div>
-    <div class="grid-3" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--stone-700);">
+    <div class="grid-2" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--stone-700);">
       <div>
-        <div class="hero-label">Myyntitulo</div>
-        <div class="tabular" style="font-weight:600; font-size:13px;" id="hero-myyntitulo">—</div>
+        <div class="hero-label">Netto myynti</div>
+        <div style="font-size: 10px; color: var(--stone-500); margin-bottom:4px;">myyntihinta − lainasaldo</div>
+        <div class="tabular" style="font-weight:600; font-size:13px;" id="hero-nettomyynti">—</div>
       </div>
       <div>
-        <div class="hero-label">– Laina</div>
-        <div class="tabular" style="font-weight:600; font-size:13px;" id="hero-laina">—</div>
-      </div>
-      <div>
-        <div class="hero-label">+ Kassavirta</div>
+        <div class="hero-label">+ Kassavirta yht.</div>
+        <div style="font-size: 10px; color: var(--stone-500); margin-bottom:4px;">koko sijoitusaika</div>
         <div class="tabular" style="font-weight:600; font-size:13px;" id="hero-kassavirta">—</div>
       </div>
     </div>
@@ -659,7 +657,7 @@ line-height: 1.6;
                 <th class="right">Lyhennys</th>
                 <th class="right">Kassavirta</th>
                 <th class="right">Lainasaldo</th>
-                <th class="right">Talon hinta</th>
+                <th class="right">Arvo €</th>
                 <th class="right">Oma pääoma</th>
                 <th class="right">Osakkeet 8%</th>
                 <th class="right">Kasvu €/v</th>
@@ -865,8 +863,7 @@ function compute() {
   document.getElementById('hero-myyntiVuosi').textContent = myyntiVuosi;
   document.getElementById('hero-voitto').textContent = fmtEur(kokonaisVoitto);
   document.getElementById('hero-vuosituotto').textContent = vuosituotto.toFixed(2) + ' %';
-  document.getElementById('hero-myyntitulo').textContent = fmtEur(myyntihinta);
-  document.getElementById('hero-laina').textContent = fmtEur(myynti.lainasaldo);
+  document.getElementById('hero-nettomyynti').textContent = fmtEur(myyntihinta - myynti.lainasaldo);
   const heroCf = document.getElementById('hero-kassavirta');
   heroCf.textContent = fmtEur(myynti.kumKassavirta);
   heroCf.className = 'tabular' + (myynti.kumKassavirta < 0 ? ' neg-light' : '');
