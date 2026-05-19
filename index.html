@@ -1,27 +1,906 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fi">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kotiasiat</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script>
-      // GitHub Pages SPA: restore path from 404 redirect
-      (function() {
-        var q = new URLSearchParams(window.location.search)
-        var p = q.get('p')
-        if (p) {
-          q.delete('p')
-          var rest = q.toString()
-          var base = '/home-todo'
-          var fullPath = base + p + (rest ? '?' + rest : '')
-          history.replaceState(null, '', fullPath)
-        }
-      })()
-    </script>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sijoituslaskuri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-50: #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-600: #57534e;
+    --stone-700: #44403c;
+    --stone-800: #292524;
+    --stone-900: #1c1917;
+    --amber-50: #fffbeb;
+    --amber-200: #fde68a;
+    --amber-300: #fcd34d;
+    --amber-400: #fbbf24;
+    --amber-700: #b45309;
+    --amber-800: #92400e;
+    --amber-900: #78350f;
+    --emerald-100: #d1fae5;
+    --emerald-200: #a7f3d0;
+    --emerald-300: #6ee7b7;
+    --emerald-500: #10b981;
+    --emerald-700: #047857;
+    --emerald-900: #064e3b;
+    --emerald-950: #022c22;
+    --red-300: #fca5a5;
+    --red-500: #ef4444;
+    --red-700: #b91c1c;
+    --blue-500: #3b82f6;
+    --blue-700: #1d4ed8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Libre Franklin', system-ui, -apple-system, sans-serif;
+    background: var(--stone-50);
+    color: var(--stone-900);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: 'Playfair Display', Georgia, serif; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+  @media (min-width: 768px) { .container { padding: 32px; } }
+
+  header {
+    border-bottom: 1px solid var(--stone-300);
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+  @media (min-width: 768px) {
+    header { padding-bottom: 24px; margin-bottom: 32px; }
+  }
+  .eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--amber-800);
+    margin-bottom: 4px;
+  }
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 48px; }
+    .eyebrow { font-size: 12px; }
+  }
+
+  .card {
+    background: white;
+    border: 1px solid var(--stone-200);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom: 16px;
+  }
+  @media (min-width: 768px) {
+    .card { padding: 24px; margin-bottom: 24px; }
+  }
+
+  .card-dark {
+    background: var(--stone-900);
+    color: var(--stone-50);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 16px;
+  }
+  @media (min-width: 768px) {
+    .card-dark { padding: 24px; margin-bottom: 24px; }
+  }
+
+  .card-emerald {
+    background: linear-gradient(135deg, var(--emerald-700), var(--emerald-900));
+    color: var(--stone-50);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 16px;
+  }
+  @media (min-width: 768px) {
+    .card-emerald { padding: 24px; margin-bottom: 24px; }
+  }
+
+  .card-amber {
+    background: white;
+    border: 2px solid var(--amber-300);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  @media (min-width: 768px) {
+    .card-amber { padding: 24px; margin-bottom: 24px; }
+  }
+
+  .label-sm {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    color: var(--stone-500);
+    margin-bottom: 12px;
+  }
+  @media (min-width: 768px) { .label-sm { font-size: 12px; } }
+
+  .label-amber { color: var(--amber-400); letter-spacing: 0.2em; }
+  .label-emerald { color: var(--emerald-200); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  @media (min-width: 768px) {
+    .grid-2, .grid-3 { gap: 16px; }
+  }
+
+  .main-grid { display: block; }
+  @media (min-width: 768px) {
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 24px;
+      align-items: start;
+    }
+  }
+
+  .hero-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (min-width: 768px) { .hero-num { font-size: 36px; } }
+
+  .hero-label {
+    font-size: 10px;
+    color: var(--stone-400);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  @media (min-width: 768px) { .hero-label { font-size: 12px; } }
+
+  .footer-line {
+    font-size: 10px;
+    color: var(--stone-500);
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--stone-700);
+    line-height: 1.5;
+  }
+  @media (min-width: 768px) { .footer-line { font-size: 12px; } }
+  .footer-line strong { color: var(--stone-300); font-weight: 600; }
+
+  .slider-row { margin-bottom: 12px; }
+  .slider-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    gap: 8px;
+  }
+  .slider-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--stone-700);
+  }
+  .slider-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--stone-900);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .slider-wrap {
+    padding: 8px 0;
+    touch-action: pan-y;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: var(--stone-200);
+    border-radius: 9999px;
+    outline: none;
+    margin: 0;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 8px;
+    background: transparent;
+    border-radius: 9999px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--amber-700);
+    cursor: grab;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.4);
+    margin-top: -10px;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(180, 83, 9, 0.5);
+  }
+  input[type="range"]::-moz-range-track {
+    height: 8px;
+    background: var(--stone-200);
+    border-radius: 9999px;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--amber-700);
+    cursor: grab;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.4);
+  }
+
+  .divider {
+    border-top: 1px solid var(--stone-200);
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+
+  .breakdown-item { margin-bottom: 14px; }
+  .breakdown-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    gap: 8px;
+  }
+  .breakdown-title { font-size: 13px; font-weight: 600; color: var(--stone-800); }
+  .breakdown-desc { font-size: 11px; color: var(--stone-500); }
+  .breakdown-value {
+    font-size: 15px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .bar-bg {
+    width: 100%;
+    height: 8px;
+    background: var(--stone-100);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.3s ease;
+  }
+  .bar-emerald { background: var(--emerald-500); }
+  .bar-amber { background: var(--amber-400); }
+  .bar-red { background: var(--red-500); }
+  .bar-blue { background: var(--blue-500); }
+  .text-emerald { color: var(--emerald-700); }
+  .text-amber { color: var(--amber-700); }
+  .text-red { color: var(--red-700); }
+  .text-blue { color: var(--blue-700); }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 2px solid var(--stone-200);
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+  .total-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (min-width: 768px) { .total-num { font-size: 28px; } }
+
+  .info-box {
+    background: var(--stone-50);
+    border: 1px solid var(--stone-200);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 11px;
+    color: var(--stone-600);
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+  @media (min-width: 768px) { .info-box { font-size: 12px; } }
+  .info-box strong { color: var(--stone-800); }
+
+  .info-box-dark {
+    background: rgba(2, 44, 34, 0.4);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 11px;
+    color: var(--emerald-100);
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+  @media (min-width: 768px) { .info-box-dark { font-size: 12px; } }
+  .info-box-dark strong { color: var(--amber-200); }
+
+  .info-box-amber {
+    background: var(--amber-50);
+    border: 1px solid var(--amber-200);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 11px;
+    color: var(--stone-700);
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+  @media (min-width: 768px) { .info-box-amber { font-size: 12px; } }
+
+  .year-card {
+    background: var(--stone-50);
+    border: 1px solid var(--stone-100);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+  .year-card.sale-year {
+    background: var(--amber-50);
+    border-color: var(--amber-300);
+  }
+  .year-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .year-card-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .badge {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--amber-700);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .year-card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 12px;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .year-card-row { display: flex; justify-content: space-between; }
+  .year-card-row .lbl { color: var(--stone-500); }
+  .year-card-row .val { color: var(--stone-800); font-weight: 500; }
+  .year-card-total {
+    grid-column: span 2;
+    padding-top: 4px;
+    margin-top: 4px;
+    border-top: 1px solid var(--stone-200);
+    display: flex;
+    justify-content: space-between;
+  }
+  .year-card-total .lbl { color: var(--stone-500); }
+  .year-card-total .val { color: var(--stone-900); font-weight: 600; }
+
+  .table-wrap { overflow-x: auto; display: none; }
+  @media (min-width: 768px) { .table-wrap { display: block; } }
+  .year-cards { display: block; }
+  @media (min-width: 768px) { .year-cards { display: none; } }
+
+  table { width: 100%; font-size: 14px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th { text-align: left; padding: 8px; font-weight: 500; color: var(--stone-600); border-bottom: 2px solid var(--stone-300); }
+  th.right, td.right { text-align: right; }
+  td { padding: 8px; border-bottom: 1px solid var(--stone-100); color: var(--stone-700); }
+  td.bold { font-weight: 600; color: var(--stone-900); }
+  tr.sale-row { background: var(--amber-50); }
+
+  .summary-card {
+    background: var(--amber-50);
+    border: 1px solid var(--amber-200);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  @media (min-width: 768px) { .summary-card { padding: 24px; } }
+  .summary-card p { font-size: 13px; color: var(--stone-800); line-height: 1.6; margin-bottom: 8px; }
+  @media (min-width: 768px) { .summary-card p { font-size: 14px; } }
+  .summary-card p:last-child { margin-bottom: 0; }
+
+  .disclaimer {
+    font-size: 10px;
+    color: var(--stone-400);
+    text-align: center;
+    margin-top: 16px;
+    padding: 0 8px;
+    line-height: 1.6;
+  }
+  @media (min-width: 768px) { .disclaimer { font-size: 12px; margin-top: 24px; } }
+
+  .pos { color: var(--emerald-700); }
+  .neg { color: var(--red-700); }
+  .pos-light { color: var(--emerald-100); }
+  .neg-light { color: var(--red-300); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="eyebrow">Asuntosijoitus · Skenaario</div>
+    <h1>Sijoituslaskuri</h1>
+  </header>
+
+  <div class="card-dark">
+    <div class="label-sm label-amber">Lopputuotto vuonna <span id="hero-myyntiVuosi">15</span></div>
+    <div class="grid-2">
+      <div>
+        <div class="hero-label">Kokonaisvoitto</div>
+        <div class="hero-num" id="hero-voitto">—</div>
+      </div>
+      <div>
+        <div class="hero-label">Vuosituotto</div>
+        <div class="hero-num" style="color: var(--amber-300);" id="hero-vuosituotto">—</div>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--stone-700);">
+      <div>
+        <div class="hero-label">Myyntitulo</div>
+        <div class="tabular" style="font-weight:600; font-size:13px;" id="hero-myyntitulo">—</div>
+      </div>
+      <div>
+        <div class="hero-label">– Laina</div>
+        <div class="tabular" style="font-weight:600; font-size:13px;" id="hero-laina">—</div>
+      </div>
+      <div>
+        <div class="hero-label">+ Kassavirta</div>
+        <div class="tabular" style="font-weight:600; font-size:13px;" id="hero-kassavirta">—</div>
+      </div>
+    </div>
+    <div class="footer-line">
+      Kuukausierä: <strong id="hero-era">—</strong> · Kokonaistuotto omalle pääomalle: <strong id="hero-total">—</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label-sm" style="margin-bottom: 4px;">Mistä tuotto muodostuu</div>
+    <p style="font-size: 11px; color: var(--stone-500); margin-bottom: 16px;" id="erittely-intro">—</p>
+
+    <div class="breakdown-item">
+      <div class="breakdown-head">
+        <div style="flex:1; min-width:0;">
+          <div class="breakdown-title">Lainan lyhennys (vuokralaisen maksama)</div>
+          <div class="breakdown-desc">Vuokralaiset maksavat lainan pois → varallisuus</div>
+        </div>
+        <div class="breakdown-value text-emerald" id="er-lyhennys">—</div>
+      </div>
+      <div class="bar-bg"><div class="bar-fill bar-emerald" id="bar-lyhennys" style="width:0%"></div></div>
+    </div>
+
+    <div class="breakdown-item">
+      <div class="breakdown-head">
+        <div style="flex:1; min-width:0;">
+          <div class="breakdown-title">Arvonnousu / -lasku</div>
+          <div class="breakdown-desc">Myyntihinta vs ostohinta</div>
+        </div>
+        <div class="breakdown-value" id="er-arvo">—</div>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" id="bar-arvo" style="width:0%"></div></div>
+    </div>
+
+    <div class="breakdown-item">
+      <div class="breakdown-head">
+        <div style="flex:1; min-width:0;">
+          <div class="breakdown-title">Nettokassavirta</div>
+          <div class="breakdown-desc">Vuokra − kulut − korot − lyhennys</div>
+        </div>
+        <div class="breakdown-value" id="er-kassavirta">—</div>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" id="bar-kassavirta" style="width:0%"></div></div>
+    </div>
+
+    <div class="total-row">
+      <div>
+        <div style="font-size:13px; font-weight:600; color: var(--stone-800);">Yhteensä kokonaisvoitto</div>
+        <div style="font-size:11px; color: var(--stone-500);" id="er-total-desc">—</div>
+      </div>
+      <div class="total-num" id="er-total">—</div>
+    </div>
+
+    <div class="info-box" id="er-info">—</div>
+  </div>
+
+  <div class="card-emerald" id="loan-end-card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom: 16px;">
+      <div>
+        <div class="label-sm label-emerald">Lainan loppumiskohta</div>
+        <div class="hero-num" id="loan-end-year">Vuosi —</div>
+        <div style="font-size: 11px; color: var(--emerald-200); margin-top: 4px;" id="loan-end-sub">—</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="hero-label" style="color: var(--emerald-200);">Kassavirtahyppy</div>
+        <div class="hero-num" style="color: var(--amber-300);" id="loan-jump">—</div>
+        <div style="font-size: 10px; color: var(--emerald-200);">vuodessa</div>
+      </div>
+    </div>
+    <div class="grid-2" style="padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.15);">
+      <div>
+        <div style="font-size: 10px; color: var(--emerald-300); text-transform: uppercase; letter-spacing: 0.05em;">Lainan kanssa</div>
+        <div style="font-size: 18px; font-weight: 700;" class="tabular" id="loan-before">—</div>
+        <div style="font-size: 10px; color: var(--emerald-300);" id="loan-before-kk">—</div>
+      </div>
+      <div>
+        <div style="font-size: 10px; color: var(--amber-300); text-transform: uppercase; letter-spacing: 0.05em;">Velaton vuosi</div>
+        <div style="font-size: 18px; font-weight: 700; color: var(--amber-200);" class="tabular" id="loan-after">—</div>
+        <div style="font-size: 10px; color: var(--amber-300);" id="loan-after-kk">—</div>
+      </div>
+    </div>
+    <div class="info-box-dark" id="loan-end-info">—</div>
+  </div>
+
+  <div class="card-amber" id="year13-card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom: 16px;">
+      <div>
+        <div class="label-sm" style="color: var(--amber-800);">Yhteenveto · ensimmäinen velaton vuosi</div>
+        <div class="hero-num" style="color: var(--stone-900);" id="y13-title">Vuosi 13</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="hero-label">Kassavirta</div>
+        <div class="hero-num text-emerald" id="y13-cf">—</div>
+        <div style="font-size: 10px; color: var(--stone-500);" id="y13-cf-kk">—</div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 16px; font-size: 13px;" class="tabular">
+      <div style="display:flex; justify-content:space-between; padding-bottom:6px; border-bottom:1px solid var(--stone-100);">
+        <span style="color: var(--stone-500);">Vuokratulot</span><span style="font-weight:500;" id="y13-vuokra">—</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding-bottom:6px; border-bottom:1px solid var(--stone-100);">
+        <span style="color: var(--stone-500);">Kulut</span><span style="font-weight:500;" id="y13-kulut">—</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding-bottom:6px; border-bottom:1px solid var(--stone-100);">
+        <span style="color: var(--stone-500);">Korot</span><span style="font-weight:500;" id="y13-korot">—</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding-bottom:6px; border-bottom:1px solid var(--stone-100);">
+        <span style="color: var(--stone-500);">Lyhennys</span><span style="font-weight:500;" id="y13-lyhennys">—</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding-bottom:6px; border-bottom:1px solid var(--stone-100);">
+        <span style="color: var(--stone-500);">Lainasaldo</span><span style="font-weight:600; color: var(--emerald-700);" id="y13-laina">—</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding-bottom:6px; border-bottom:1px solid var(--stone-100);">
+        <span style="color: var(--stone-500);">Talon arvo</span><span style="font-weight:500;" id="y13-arvo">—</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; grid-column:span 2; padding-top:8px; border-top:2px solid var(--stone-200);">
+        <span style="font-weight:600; color: var(--stone-700);">Oma osuus (varallisuus)</span>
+        <span style="font-weight:700; font-size: 16px; color: var(--stone-900);" id="y13-oma">—</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; grid-column:span 2;">
+        <span style="font-size:11px; color: var(--stone-500);">Kumulatiivinen kassavirta vuoteen 13</span>
+        <span style="font-size:11px; font-weight:600;" class="tabular" id="y13-kumcf">—</span>
+      </div>
+    </div>
+    <div class="info-box-amber" id="y13-info">—</div>
+  </div>
+
+  <div class="main-grid">
+    <div class="card" style="height:fit-content;">
+      <div class="label-sm">Parametrit</div>
+      <div id="sliders"></div>
+      <div class="divider">
+        <div class="label-sm" style="color: var(--amber-800);">Myyntiskenaario</div>
+        <div id="sale-sliders"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="label-sm">Tilanne vuosina 10–15</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Vuosi</th>
+                <th class="right">Vuokra</th>
+                <th class="right">Korot</th>
+                <th class="right">Lyhennys</th>
+                <th class="right">Kassavirta</th>
+                <th class="right">Lainasaldo</th>
+                <th class="right">Oma osuus</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+        <div class="year-cards" id="year-cards"></div>
+      </div>
+
+      <div class="summary-card">
+        <div class="label-sm" style="color: var(--amber-900);">Yhteenveto</div>
+        <div id="summary-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    Yksinkertaistettu malli · ei huomioi veroja, vastikkeen erillistä nousua tai remontteja · annuiteettilaina
+  </div>
+</div>
+
+<script>
+const state = {
+  hinta: 135000,
+  vuokra: 850,
+  kulut: 100,
+  omaPaaoma: 35000,
+  velka: 100000,
+  korko: 3.5,
+  lainaAika: 12,
+  arvonnousu: 0,
+  vuokrankorotus: 2,
+  myyntiVuosi: 15,
+  myyntihinta: 135000,
+};
+
+const sliderDefs = [
+  { key: 'hinta',         label: 'Talon hinta',       min: 50000,  max: 300000, step: 500,  unit: '€' },
+  { key: 'vuokra',        label: 'Vuokra / kk',        min: 400,    max: 1500,   step: 5,    unit: '€' },
+  { key: 'kulut',         label: 'Kulut / kk',         min: 0,      max: 500,    step: 5,    unit: '€' },
+  { key: 'omaPaaoma',     label: 'Oma pääoma',         min: 5000,   max: 150000, step: 500,  unit: '€' },
+  { key: 'velka',         label: 'Velka',              min: 0,      max: 250000, step: 500,  unit: '€' },
+  { key: 'korko',         label: 'Korko',              min: 0,      max: 8,      step: 0.05, unit: '%' },
+  { key: 'lainaAika',     label: 'Laina-aika',         min: 5,      max: 30,     step: 1,    unit: 'v' },
+  { key: 'arvonnousu',    label: 'Arvonnousu / v',     min: -2,     max: 5,      step: 0.05, unit: '%' },
+  { key: 'vuokrankorotus',label: 'Vuokrankorotus / v', min: 0,      max: 5,      step: 0.05, unit: '%' },
+];
+
+const saleSliderDefs = [
+  { key: 'myyntiVuosi',  label: 'Myyntivuosi',  min: 5,     max: 20,     step: 1,   unit: 'v' },
+  { key: 'myyntihinta',  label: 'Myyntihinta',  min: 50000, max: 400000, step: 500, unit: '€' },
+];
+
+function fmt(n) { return Math.round(n).toLocaleString('fi-FI'); }
+function fmtEur(n) { return fmt(n) + ' €'; }
+function fmtSigned(n) { return (n >= 0 ? '+' : '') + fmt(n) + ' €'; }
+
+function buildSlider(def) {
+  const row = document.createElement('div');
+  row.className = 'slider-row';
+  row.innerHTML = `
+    <div class="slider-head">
+      <label class="slider-label">${def.label}</label>
+      <span class="slider-value" id="val-${def.key}"></span>
+    </div>
+    <div class="slider-wrap">
+      <input type="range" id="sl-${def.key}" min="${def.min}" max="${def.max}" step="${def.step}" value="${state[def.key]}">
+    </div>`;
+  return row;
+}
+
+function renderSliders() {
+  const wrap = document.getElementById('sliders');
+  const sale = document.getElementById('sale-sliders');
+  sliderDefs.forEach(d => wrap.appendChild(buildSlider(d)));
+  saleSliderDefs.forEach(d => sale.appendChild(buildSlider(d)));
+  [...sliderDefs, ...saleSliderDefs].forEach(d => {
+    document.getElementById('sl-' + d.key).addEventListener('input', e => {
+      state[d.key] = parseFloat(e.target.value);
+      compute();
+    });
+  });
+}
+
+function compute() {
+  const { hinta, vuokra, kulut, omaPaaoma, velka, korko, lainaAika, arvonnousu, vuokrankorotus, myyntiVuosi, myyntihinta } = state;
+
+  const kkKorko = korko / 100 / 12;
+  const lainaKk = lainaAika * 12;
+  const kuukausiera = kkKorko === 0
+    ? velka / lainaKk
+    : (velka * kkKorko) / (1 - Math.pow(1 + kkKorko, -lainaKk));
+
+  const vuodet = [];
+  let lainasaldo = velka;
+  let kumCF = 0;
+  let kumLyhennys = 0;
+
+  for (let v = 1; v <= 20; v++) {
+    let vKorot = 0, vLyhennys = 0;
+    for (let kk = 0; kk < 12; kk++) {
+      if (lainasaldo > 0) {
+        const k = lainasaldo * kkKorko;
+        const l = Math.min(kuukausiera - k, lainasaldo);
+        vKorot += k; vLyhennys += l; lainasaldo -= l;
+        if (lainasaldo < 0) lainasaldo = 0;
+      }
+    }
+    const vuokraT = vuokra * 12 * Math.pow(1 + vuokrankorotus / 100, v - 1);
+    const kuluT   = kulut  * 12 * Math.pow(1 + vuokrankorotus / 100, v - 1);
+    const cf = vuokraT - kuluT - vKorot - vLyhennys;
+    kumCF += cf; kumLyhennys += vLyhennys;
+    const taloArvo = hinta * Math.pow(1 + arvonnousu / 100, v);
+    vuodet.push({ vuosi: v, vuokraTulot: vuokraT, kuluTulot: kuluT, korot: vKorot,
+      lyhennys: vLyhennys, kassavirta: cf, kumKassavirta: kumCF, kumLyhennys,
+      lainasaldo, taloArvo, oma: taloArvo - lainasaldo });
+  }
+
+  const myynti = vuodet[myyntiVuosi - 1];
+  const myyntiTuotto  = myyntihinta - myynti.lainasaldo;
+  const kokonaisVoitto = myyntiTuotto + myynti.kumKassavirta - omaPaaoma;
+  const totalReturn    = (kokonaisVoitto / omaPaaoma) * 100;
+  const vuosituotto    = (Math.pow(Math.max(0.01, 1 + kokonaisVoitto / omaPaaoma), 1 / myyntiVuosi) - 1) * 100;
+  const lyhennysOsuus  = myynti.kumLyhennys;
+  const arvonmuutos    = myyntihinta - hinta;
+  const kassavirtaOsuus = myynti.kumKassavirta;
+
+  [...sliderDefs, ...saleSliderDefs].forEach(d => {
+    const el = document.getElementById('val-' + d.key);
+    if (el) el.textContent = state[d.key].toLocaleString('fi-FI') + ' ' + d.unit;
+  });
+
+  document.getElementById('hero-myyntiVuosi').textContent = myyntiVuosi;
+  document.getElementById('hero-voitto').textContent      = fmtEur(kokonaisVoitto);
+  document.getElementById('hero-vuosituotto').textContent = vuosituotto.toFixed(2) + ' %';
+  document.getElementById('hero-myyntitulo').textContent  = fmtEur(myyntihinta);
+  document.getElementById('hero-laina').textContent       = fmtEur(myynti.lainasaldo);
+  const heroCf = document.getElementById('hero-kassavirta');
+  heroCf.textContent = fmtEur(myynti.kumKassavirta);
+  heroCf.className = 'tabular' + (myynti.kumKassavirta < 0 ? ' neg-light' : '');
+  document.getElementById('hero-era').textContent   = fmtEur(kuukausiera);
+  document.getElementById('hero-total').textContent = totalReturn.toFixed(1) + ' %';
+
+  document.getElementById('erittely-intro').textContent =
+    `${myyntiVuosi} vuoden aikana omasta ${fmtEur(omaPaaoma)} pääomasta tulee ${fmtEur(omaPaaoma + kokonaisVoitto)}`;
+
+  const maxAbs = Math.max(Math.abs(lyhennysOsuus), Math.abs(arvonmuutos), Math.abs(kassavirtaOsuus), Math.abs(kokonaisVoitto));
+  document.getElementById('er-lyhennys').textContent = fmtSigned(lyhennysOsuus);
+  document.getElementById('bar-lyhennys').style.width = (Math.abs(lyhennysOsuus) / maxAbs * 100) + '%';
+
+  const erArvo = document.getElementById('er-arvo');
+  erArvo.textContent = fmtSigned(arvonmuutos);
+  erArvo.className = 'breakdown-value ' + (arvonmuutos >= 0 ? 'text-amber' : 'text-red');
+  const barArvo = document.getElementById('bar-arvo');
+  barArvo.className = 'bar-fill ' + (arvonmuutos >= 0 ? 'bar-amber' : 'bar-red');
+  barArvo.style.width = (Math.abs(arvonmuutos) / maxAbs * 100) + '%';
+
+  const erCf = document.getElementById('er-kassavirta');
+  erCf.textContent = fmtSigned(kassavirtaOsuus);
+  erCf.className = 'breakdown-value ' + (kassavirtaOsuus >= 0 ? 'text-blue' : 'text-red');
+  const barCf = document.getElementById('bar-kassavirta');
+  barCf.className = 'bar-fill ' + (kassavirtaOsuus >= 0 ? 'bar-blue' : 'bar-red');
+  barCf.style.width = (Math.abs(kassavirtaOsuus) / maxAbs * 100) + '%';
+
+  const erTotal = document.getElementById('er-total');
+  erTotal.textContent = fmtSigned(kokonaisVoitto);
+  erTotal.className = 'total-num ' + (kokonaisVoitto >= 0 ? 'text-emerald' : 'text-red');
+  document.getElementById('er-total-desc').textContent =
+    `= varallisuuden kasvu ${fmtEur(omaPaaoma)} omasta pääomasta`;
+  document.getElementById('er-info').innerHTML =
+    `<strong>Vipuvaikutus:</strong> Lyhennysosuus ${fmtEur(lyhennysOsuus)} on isompi kuin oma pääoma ${fmtEur(omaPaaoma)} — vuokralaiset maksavat sinulle ${((lyhennysOsuus / omaPaaoma) * 100).toFixed(0)} % alkupääomasta takaisin pelkän lainan lyhennyksen kautta. Tämä on velkavivun ydin.`;
+
+  const lainaLoppuuIdx   = vuodet.findIndex(v => v.lainasaldo === 0);
+  const lainaLoppuuVuosi = lainaLoppuuIdx + 1;
+  const loanCard = document.getElementById('loan-end-card');
+  if (lainaLoppuuIdx >= 0 && lainaLoppuuIdx < 19) {
+    loanCard.style.display = 'block';
+    document.getElementById('loan-end-year').textContent = 'Vuosi ' + lainaLoppuuVuosi;
+    document.getElementById('loan-end-sub').textContent  =
+      `Vuosi ${lainaLoppuuVuosi + 1} on ensimmäinen täysin velaton vuosi`;
+    const ennen   = lainaLoppuuIdx > 0 ? vuodet[lainaLoppuuIdx - 1] : null;
+    const jalkeen = vuodet[lainaLoppuuIdx + 1] || null;
+    if (ennen && jalkeen) {
+      const hyppy = jalkeen.kassavirta - ennen.kassavirta;
+      document.getElementById('loan-jump').textContent      = '+' + fmt(hyppy) + ' €';
+      document.getElementById('loan-before').textContent    = (ennen.kassavirta >= 0 ? '+' : '') + fmt(ennen.kassavirta) + ' €';
+      document.getElementById('loan-before-kk').textContent = '~' + fmt(ennen.kassavirta / 12) + ' €/kk · vuosi ' + ennen.vuosi;
+      document.getElementById('loan-after').textContent     = '+' + fmt(jalkeen.kassavirta) + ' €';
+      document.getElementById('loan-after-kk').textContent  = '~' + fmt(jalkeen.kassavirta / 12) + ' €/kk · vuosi ' + jalkeen.vuosi;
+    }
+    const velattomatVuodet = Math.max(0, myyntiVuosi - lainaLoppuuVuosi);
+    const velattomatCF     = vuodet.slice(lainaLoppuuVuosi, myyntiVuosi).reduce((s, v) => s + v.kassavirta, 0);
+    document.getElementById('loan-end-info').innerHTML =
+      `Lainan loppumisen jälkeen vuokratulot (− pienet kulut) ovat käytännössä puhdasta tuottoa. Jos pidät kohteen myyntivuoteen ${myyntiVuosi} asti, viimeiset ${velattomatVuodet} vuotta tuovat yhteensä noin <strong>${fmtEur(velattomatCF)}</strong> kassavirtaa.`;
+  } else {
+    loanCard.style.display = 'none';
+  }
+
+  const y13 = vuodet[12];
+  if (y13) {
+    document.getElementById('y13-cf').textContent = (y13.kassavirta >= 0 ? '+' : '') + fmt(y13.kassavirta) + ' €';
+    document.getElementById('y13-cf').className   = 'hero-num ' + (y13.kassavirta >= 0 ? 'text-emerald' : 'text-red');
+    document.getElementById('y13-cf-kk').textContent   = '~' + fmt(y13.kassavirta / 12) + ' €/kk';
+    document.getElementById('y13-vuokra').textContent  = '+' + fmt(y13.vuokraTulot) + ' €';
+    document.getElementById('y13-kulut').textContent   = '−' + fmt(y13.kuluTulot) + ' €';
+    document.getElementById('y13-korot').textContent   = '−' + fmt(y13.korot) + ' €';
+    document.getElementById('y13-lyhennys').textContent= '−' + fmt(y13.lyhennys) + ' €';
+    document.getElementById('y13-laina').textContent   = fmt(y13.lainasaldo) + ' €';
+    document.getElementById('y13-arvo').textContent    = fmt(y13.taloArvo) + ' €';
+    document.getElementById('y13-oma').textContent     = fmt(y13.oma) + ' €';
+    const kumCfEl = document.getElementById('y13-kumcf');
+    kumCfEl.textContent = (y13.kumKassavirta >= 0 ? '+' : '') + fmt(y13.kumKassavirta) + ' €';
+    kumCfEl.className   = 'tabular ' + (y13.kumKassavirta >= 0 ? 'text-emerald' : 'text-red');
+    const kasvu = ((y13.oma / omaPaaoma - 1) * 100).toFixed(0);
+    const cagr  = ((Math.pow(y13.oma / omaPaaoma, 1/13) - 1) * 100).toFixed(1);
+    document.getElementById('y13-info').innerHTML =
+      `Vuoden 13 alusta laina on maksettu pois. Vuokratulot miinus pienet kulut tuottavat <strong style="color:var(--emerald-700);">${fmt(y13.kassavirta / 12)} €/kk</strong> puhdasta kassavirtaa. Varallisuus on kasvanut ${fmtEur(omaPaaoma)} → <strong>${fmt(y13.oma)} €</strong> eli ${kasvu}&nbsp;% 13 vuodessa, mikä vastaa noin ${cagr}&nbsp;% vuosituottoa omalle pääomalle.`;
+  }
+
+  const tbody = document.getElementById('table-body');
+  const cards = document.getElementById('year-cards');
+  tbody.innerHTML = ''; cards.innerHTML = '';
+  for (let i = 9; i < 15; i++) {
+    const v = vuodet[i];
+    if (!v) continue;
+    const isSale = v.vuosi === myyntiVuosi;
+    const cfClass = v.kassavirta >= 0 ? 'pos' : 'neg';
+    const cfSign  = v.kassavirta >= 0 ? '+' : '';
+
+    const tr = document.createElement('tr');
+    if (isSale) tr.className = 'sale-row';
+    tr.innerHTML = `
+      <td class="bold">${v.vuosi}</td>
+      <td class="right">${fmt(v.vuokraTulot)}</td>
+      <td class="right">${fmt(v.korot)}</td>
+      <td class="right">${fmt(v.lyhennys)}</td>
+      <td class="right ${cfClass}" style="font-weight:500;">${fmt(v.kassavirta)}</td>
+      <td class="right">${fmt(v.lainasaldo)}</td>
+      <td class="right bold">${fmt(v.oma)}</td>`;
+    tbody.appendChild(tr);
+
+    const card = document.createElement('div');
+    card.className = 'year-card' + (isSale ? ' sale-year' : '');
+    card.innerHTML = `
+      <div class="year-card-head">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span class="year-card-title">Vuosi ${v.vuosi}</span>
+          ${isSale ? '<span class="badge">Myynti</span>' : ''}
+        </div>
+        <span class="${cfClass}" style="font-weight:700; font-size:13px;">${cfSign}${fmt(v.kassavirta)} €</span>
+      </div>
+      <div class="year-card-grid">
+        <div class="year-card-row"><span class="lbl">Vuokra</span><span class="val">${fmt(v.vuokraTulot)}</span></div>
+        <div class="year-card-row"><span class="lbl">Korot</span><span class="val">${fmt(v.korot)}</span></div>
+        <div class="year-card-row"><span class="lbl">Lyhennys</span><span class="val">${fmt(v.lyhennys)}</span></div>
+        <div class="year-card-row"><span class="lbl">Laina</span><span class="val">${fmt(v.lainasaldo)}</span></div>
+        <div class="year-card-total"><span class="lbl">Oma osuus</span><span class="val">${fmt(v.oma)} €</span></div>
+      </div>`;
+    cards.appendChild(card);
+  }
+
+  const v1cf  = vuodet[0].kassavirta;
+  const v15cf = vuodet[14].kassavirta;
+  document.getElementById('summary-text').innerHTML = `
+    <p>Sijoitat <strong>${fmtEur(omaPaaoma)}</strong> omaa pääomaa <strong>${fmtEur(hinta)}</strong> kohteeseen. Laina <strong>${fmtEur(velka)}</strong> korolla <strong>${korko} %</strong> (${lainaAika}&nbsp;v annuiteetti) tarkoittaa <strong>${fmtEur(kuukausiera)}</strong>/kk hoitoerää.</p>
+    <p>Vuoden 1 kassavirta on <strong class="${v1cf >= 0 ? 'pos' : 'neg'}">${fmtEur(v1cf)}</strong>. Laina maksetaan pois vuonna ${lainaLoppuuVuosi > 0 ? lainaLoppuuVuosi : lainaAika}, jonka jälkeen kassavirta nousee selvästi. Vuonna 15 kassavirta on <strong class="${v15cf >= 0 ? 'pos' : 'neg'}">${fmtEur(v15cf)}</strong> ja lainasaldo <strong>${fmtEur(vuodet[14].lainasaldo)}</strong>.</p>
+    <p>Vuokralaiset maksavat lainan pois (${fmtEur(lyhennysOsuus)} lyhennystä ${myyntiVuosi} vuodessa) ja myynti vuonna ${myyntiVuosi} hintaan <strong>${fmtEur(myyntihinta)}</strong> tuo käteen <strong>${fmtEur(myyntiTuotto)}</strong>. Kokonaisvoitto <strong class="${kokonaisVoitto >= 0 ? 'pos' : 'neg'}">${fmtEur(kokonaisVoitto)}</strong> = <strong>${vuosituotto.toFixed(2)} %</strong> vuosituotto omalle pääomalle.</p>`;
+}
+
+renderSliders();
+compute();
+</script>
+
+</body>
 </html>
