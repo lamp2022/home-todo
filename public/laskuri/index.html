@@ -471,7 +471,7 @@ line-height: 1.6;
     <div class="eyebrow">Asuntosijoitus · Skenaario</div>
     <div style="display:flex; align-items:baseline; gap:12px;">
       <h1>Sijoituslaskuri</h1>
-      <span style="font-size:11px; color:var(--stone-400); font-variant-numeric:tabular-nums;">v1.0</span>
+      <span style="font-size:11px; color:var(--stone-400); font-variant-numeric:tabular-nums;">v1.1</span>
     </div>
   </header>
 
@@ -661,11 +661,11 @@ line-height: 1.6;
                 <th class="right">Lainasaldo</th>
                 <th class="right">Talon hinta</th>
                 <th class="right">Oma pääoma</th>
+                <th class="right">Osakkeet 8%</th>
                 <th class="right">Kasvu €/v</th>
                 <th class="right">IRR %</th>
                 <th class="right">Tuotto %</th>
                 <th class="right">Voitto €</th>
-                <th class="right">Osakkeet 8%</th>
               </tr>
             </thead>
             <tbody id="table-body"></tbody>
@@ -1002,11 +1002,11 @@ function compute() {
       <td class="right">${fmt(v.lainasaldo)}</td>
       <td class="right bold">${fmt(v.taloArvo)}</td>
       <td class="right bold">${fmt(kertynyt)}</td>
+      <td class="right ${stockClass}">${fmt(stockValue)} €</td>
       <td class="right ${kasvuClass}">${fmtSigned(kasvuVuosi)}</td>
       <td class="right ${irrClass}" style="font-weight:600;">${yearIrr.toFixed(1)} %</td>
       <td class="right ${retClass}" style="font-weight:600;">${yearTotalReturn.toFixed(0)} %</td>
       <td class="right ${retClass}">${fmtSigned(yearProfit)}</td>
-      <td class="right ${stockClass}">${fmt(stockValue)} €</td>
     `;
     tbody.appendChild(tr);
 
@@ -1026,11 +1026,11 @@ function compute() {
         <div class="year-card-row"><span class="lbl">Lyhennys</span><span class="val">${fmt(v.lyhennys)}</span></div>
         <div class="year-card-row"><span class="lbl">Laina</span><span class="val">${fmt(v.lainasaldo)}</span></div>
         <div class="year-card-row"><span class="lbl">Oma pääoma</span><span class="val">${fmt(kertynyt)} €</span></div>
+        <div class="year-card-row"><span class="lbl ${stockClass}">Osakkeet 8%</span><span class="val ${stockClass}">${fmt(stockValue)} €</span></div>
         <div class="year-card-row"><span class="lbl ${kasvuClass}">Kasvu €/v</span><span class="val ${kasvuClass}">${fmtSigned(kasvuVuosi)}</span></div>
         <div class="year-card-row"><span class="lbl ${irrClass}">IRR</span><span class="val ${irrClass}">${yearIrr.toFixed(1)} %</span></div>
         <div class="year-card-row"><span class="lbl ${retClass}">Tuotto %</span><span class="val ${retClass}">${yearTotalReturn.toFixed(0)} %</span></div>
         <div class="year-card-row"><span class="lbl ${retClass}">Voitto €</span><span class="val ${retClass}">${fmtSigned(yearProfit)}</span></div>
-        <div class="year-card-row"><span class="lbl ${stockClass}">Osakkeet 8%</span><span class="val ${stockClass}">${fmt(stockValue)} €</span></div>
         <div class="year-card-total"><span class="lbl">Talon hinta</span><span class="val">${fmt(v.taloArvo)} €</span></div>
       </div>
     `;
@@ -1049,7 +1049,9 @@ function compute() {
 }
 
 renderSliders();
-// Sync myyntihinta to market value at startup
+// Default sale year to first debt-free year (lainaAika + 1), not hardcoded 15
+state.myyntiVuosi = Math.min(state.lainaAika + 1, 20);
+document.getElementById('sl-myyntiVuosi').value = state.myyntiVuosi;
 state.myyntihinta = Math.round(state.hinta * Math.pow(1 + state.arvonnousu / 100, state.myyntiVuosi) / 500) * 500;
 document.getElementById('sl-myyntihinta').value = state.myyntihinta;
 compute();
