@@ -456,6 +456,51 @@ line-height: 1.6;
 }
 @media (min-width: 768px) { .disclaimer { font-size: 12px; margin-top: 24px; } }
 
+/* Ohjainpaneeli — pysyy näkyvissä työpöydällä */
+@media (min-width: 768px) {
+.param-panel {
+position: sticky;
+top: 32px;
+max-height: calc(100vh - 64px);
+overflow-y: auto;
+}
+}
+
+/* Lisätieto-osio */
+.more-detail { margin-bottom: 16px; }
+.more-detail > summary {
+list-style: none;
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 14px 16px;
+background: white;
+border: 1px solid var(--stone-200);
+border-radius: 12px;
+box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+font-size: 13px;
+font-weight: 600;
+color: var(--stone-600);
+}
+.more-detail > summary::-webkit-details-marker { display: none; }
+.more-detail > summary::before {
+content: '+';
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 20px;
+height: 20px;
+flex-shrink: 0;
+border-radius: 50%;
+background: var(--stone-100);
+color: var(--stone-600);
+font-size: 14px;
+font-weight: 700;
+}
+.more-detail[open] > summary { margin-bottom: 16px; }
+.more-detail[open] > summary::before { content: '−'; }
+
 /* Apuvärit */
 .pos { color: var(--emerald-700); }
 .neg { color: var(--red-700); }
@@ -474,6 +519,34 @@ line-height: 1.6;
       <span style="font-size:11px; color:var(--stone-400); font-variant-numeric:tabular-nums;">v1.5</span>
     </div>
   </header>
+
+  <div class="main-grid">
+    <!-- Ohjaimet ensin -->
+    <div class="card param-panel">
+      <div class="label-sm">Parametrit</div>
+      <div id="sliders"></div>
+      <div class="divider">
+        <div class="label-sm" style="color: var(--amber-800);">Myyntiskenaario</div>
+        <div id="sale-sliders"></div>
+      </div>
+      <div class="divider">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div class="slider-label">Yrityssijoitus</div>
+            <div style="font-size:11px; color:var(--stone-500); margin-top:2px;">Korkovähennys 20 % lisätään kassavirtaan</div>
+          </div>
+          <label style="position:relative; display:inline-block; width:40px; height:22px; flex-shrink:0;">
+            <input type="checkbox" id="toggle-yritys" style="opacity:0; width:0; height:0;">
+            <span id="toggle-track" style="position:absolute; cursor:pointer; inset:0; background:var(--stone-300); border-radius:22px; transition:.2s;"></span>
+            <span id="toggle-thumb" style="position:absolute; left:3px; top:3px; width:16px; height:16px; background:white; border-radius:50%; transition:.2s; box-shadow:0 1px 3px rgba(0,0,0,.3);"></span>
+          </label>
+        </div>
+        <div id="yritys-info" style="display:none; margin-top:10px; font-size:11px; color:var(--stone-600); background:var(--amber-50); border:1px solid var(--amber-200); border-radius:6px; padding:8px;"></div>
+      </div>
+    </div>
+
+    <!-- Tulokset -->
+    <div class="results-col">
 
   <!-- Lopputuotto -->
 
@@ -556,7 +629,10 @@ line-height: 1.6;
     <div class="info-box" id="er-info">—</div>
   </div>
 
-  <!-- Lainan loppuminen -->
+  <!-- Lainan loppuminen ja velaton vuosi (lisätieto, piilotettu oletuksena) -->
+
+  <details class="more-detail">
+    <summary>Lainan loppuminen ja ensimmäinen velaton vuosi</summary>
 
   <div class="card-emerald" id="loan-end-card">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom: 16px;">
@@ -632,33 +708,8 @@ line-height: 1.6;
     <div class="info-box-amber" id="y13-info">—</div>
   </div>
 
-  <div class="main-grid">
-    <!-- Parametrit -->
-    <div class="card" style="height:fit-content;">
-      <div class="label-sm">Parametrit</div>
-      <div id="sliders"></div>
-      <div class="divider">
-        <div class="label-sm" style="color: var(--amber-800);">Myyntiskenaario</div>
-        <div id="sale-sliders"></div>
-      </div>
-      <div class="divider">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div class="slider-label">Yrityssijoitus</div>
-            <div style="font-size:11px; color:var(--stone-500); margin-top:2px;">Korkovähennys 20 % lisätään kassavirtaan</div>
-          </div>
-          <label style="position:relative; display:inline-block; width:40px; height:22px; flex-shrink:0;">
-            <input type="checkbox" id="toggle-yritys" style="opacity:0; width:0; height:0;">
-            <span id="toggle-track" style="position:absolute; cursor:pointer; inset:0; background:var(--stone-300); border-radius:22px; transition:.2s;"></span>
-            <span id="toggle-thumb" style="position:absolute; left:3px; top:3px; width:16px; height:16px; background:white; border-radius:50%; transition:.2s; box-shadow:0 1px 3px rgba(0,0,0,.3);"></span>
-          </label>
-        </div>
-        <div id="yritys-info" style="display:none; margin-top:10px; font-size:11px; color:var(--stone-600); background:var(--amber-50); border:1px solid var(--amber-200); border-radius:6px; padding:8px;" id="yritys-info"></div>
-      </div>
-    </div>
+  </details>
 
-    <!-- Taulukko + Yhteenveto -->
-    <div>
       <div class="card">
         <div class="label-sm">Tilanne kaikki vuodet</div>
         <div class="table-wrap">
@@ -960,6 +1011,8 @@ function compute() {
   } else {
     loanCard.style.display = 'none';
   }
+  const moreDetail = document.querySelector('.more-detail');
+  if (moreDetail) moreDetail.style.display = (lainaLoppuuIdx >= 0 && lainaLoppuuIdx < 19) ? '' : 'none';
 
   // Ensimmäinen velaton vuosi (dynaaminen, ei hardkoodattu vuoteen 13)
   const velattomVuosiNum = lainaLoppuuIdx >= 0 ? lainaLoppuuVuosi + 1 : null;
