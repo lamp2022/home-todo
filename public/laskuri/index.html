@@ -703,8 +703,8 @@ const state = {
   hinta: 135000,
   vuokra: 850,
   kulut: 100,
-  omaPaaoma: 35000,
-  velka: 100000,
+  omaPaaoma: 40500,
+  velka: 94500,
   korko: 3.5,
   lainaAika: 12,
   arvonnousu: 0,
@@ -784,6 +784,15 @@ function renderSliders() {
     const input = document.getElementById('sl-' + d.key);
     input.addEventListener('input', (e) => {
       state[d.key] = parseFloat(e.target.value);
+      if (d.key === 'hinta') {
+        // Oletus: oma pääoma 30 % hinnasta, velka loput (maksimilaina)
+        state.omaPaaoma = Math.round(state.hinta * 0.30 / 500) * 500;
+        state.velka = state.hinta - state.omaPaaoma;
+        const slOma = document.getElementById('sl-omaPaaoma');
+        const slVelka = document.getElementById('sl-velka');
+        if (slOma) slOma.value = state.omaPaaoma;
+        if (slVelka) slVelka.value = state.velka;
+      }
       if (['hinta', 'arvonnousu', 'myyntiVuosi'].includes(d.key)) {
         const autoPrice = state.hinta * Math.pow(1 + state.arvonnousu / 100, state.myyntiVuosi);
         state.myyntihinta = Math.round(autoPrice / 500) * 500;
@@ -1071,6 +1080,11 @@ function compute() {
 }
 
 renderSliders();
+// Oletus: oma pääoma 30 % hinnasta, velka loput (maksimilaina)
+state.omaPaaoma = Math.round(state.hinta * 0.30 / 500) * 500;
+state.velka = state.hinta - state.omaPaaoma;
+document.getElementById('sl-omaPaaoma').value = state.omaPaaoma;
+document.getElementById('sl-velka').value = state.velka;
 // Default sale year to first debt-free year (lainaAika + 1), not hardcoded 15
 state.myyntiVuosi = Math.min(state.lainaAika + 1, 20);
 document.getElementById('sl-myyntiVuosi').value = state.myyntiVuosi;
