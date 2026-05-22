@@ -676,7 +676,6 @@ line-height: 1.6;
                 <th class="right">Kasvu €/v</th>
                 <th class="right">IRR %</th>
                 <th class="right">Tuotto %</th>
-                <th class="right">Voitto €</th>
               </tr>
             </thead>
             <tbody id="table-body"></tbody>
@@ -1038,7 +1037,6 @@ function compute() {
       <td class="right ${kasvuClass}">${fmtSigned(kasvuVuosi)}</td>
       <td class="right ${irrClass}" style="font-weight:600;">${yearIrr.toFixed(1)} %</td>
       <td class="right ${retClass}" style="font-weight:600;">${yearTotalReturn.toFixed(0)} %</td>
-      <td class="right ${retClass}">${fmtSigned(yearProfit)}</td>
     `;
     tbody.appendChild(tr);
 
